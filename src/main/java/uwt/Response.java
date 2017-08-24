@@ -11,6 +11,7 @@ package uwt;
  */
 public class Response {
     String value;
+    String uuid;
     
     public String getValue()
     {
@@ -20,9 +21,18 @@ public class Response {
     {
         this.value = value;
     }
-    public Response(String value)
+    public String getUuid()
+    {
+        return uuid;
+    }
+    public void setUuid(String uuid)
+    {
+        this.uuid = uuid;
+    }
+    public Response(String value, String uuid)
     {
         this.value = value;
+        this.uuid = uuid;
     }
     public Response()
     {
