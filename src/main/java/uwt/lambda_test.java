@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Random;
 import java.util.UUID;
 /**
  *
@@ -34,7 +35,8 @@ public class lambda_test implements RequestHandler<Request, Response>
         logger.log("Received=" + request.getName());
         File f = new File("/tmp/container-id");
         Path p = Paths.get("/tmp/container-id");
-        if (f.exists())
+        
+        if (f.exists()) 
         {
             try (BufferedReader br = Files.newBufferedReader(p))
             {
@@ -61,8 +63,45 @@ public class lambda_test implements RequestHandler<Request, Response>
             
         }
             
-        
+        for (int i=0;i<request.getLoops();i++)
+        {
+            randomMath(request.getCalcs());
+            try
+            {
+                Thread.sleep(request.getSleep());
+            }
+            catch (InterruptedException ie)
+            {
+                System.out.println("Sleep was interrupted...");
+            }
+        }
         return new Response("Success=" + request.getName(), uuid);
+    }
+    
+    
+    private void randomMath(int calcs)
+    {
+        Random rand = new Random();
+        // By not reusing the same variables in the calc, this should prevent
+        // compiler optimization... Also each math operation should operate
+        // on between operands in different memory locations.
+        long[] operand_a = new long[calcs];
+        long[] operand_b = new long[calcs];
+        long[] operand_c = new long[calcs];
+        long mult;
+        double div1;
+        
+        for (int i=0;i<calcs;i++)
+        {
+            // By not using sequential locations in the array, we should 
+            // reduce memory lookup efficiency
+            int j = rand.nextInt(calcs);
+            operand_a[j] = rand.nextInt(99999);
+            operand_b[j] = rand.nextInt(99999);
+            operand_c[j] = rand.nextInt(99999);
+            mult = operand_a[j] * operand_b[j];
+            div1 = (double) mult / (double) operand_c[j];
+        }
     }
 
 }

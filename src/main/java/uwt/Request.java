@@ -11,6 +11,9 @@ package uwt;
  */
 public class Request {
     String name;
+    int calcs;
+    int sleep;
+    int loops;
     public String getName()
     {
         return name;
@@ -18,6 +21,30 @@ public class Request {
     public void setName(String name)
     {
         this.name = name;
+    }
+    public int getCalcs()
+    {
+        return calcs;
+    }
+    public void setCalcs(int calcs)
+    {
+        this.calcs = calcs;
+    }
+    public int getSleep()
+    {
+        return sleep;
+    }
+    public void setSleep(int sleep)
+    {
+        this.sleep = sleep;
+    }
+    public int getLoops()
+    {
+        return loops;
+    }
+    public void setLoops(int loops)
+    {
+        this.loops = loops;
     }
     public Request(String name)
     {
