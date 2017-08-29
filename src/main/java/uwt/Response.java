@@ -100,4 +100,11 @@ public class Response {
     {
         
     }
+    
+    @Override
+    public String toString()
+    {
+        return "value=" + this.getValue() + " uuid=" + this.getUuid() + " cpuusr=" + this.getCpuUsr() + " cpukrn=" + this.getCpuKrn()
+                + " cutime=" + this.getCuTime() + " cstime=" + this.getCsTime() + "\nfile=\n" + this.getValue();
+    }
 }

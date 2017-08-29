@@ -5,6 +5,8 @@
  */
 package uwt;
 
+import com.amazonaws.services.lambda.runtime.ClientContext;
+import com.amazonaws.services.lambda.runtime.CognitoIdentity;
 import com.amazonaws.services.lambda.runtime.Context; 
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -35,7 +37,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         CpuTime c1 = getCpuUtilization();
         String uuid = "unset";
         LambdaLogger logger = context.getLogger();
-        logger.log("Received=" + request.getName());
+        logger.log("Request for file=" + request.getName());
         File f = new File("/tmp/container-id");
         Path p = Paths.get("/tmp/container-id");
         
@@ -80,7 +82,8 @@ public class lambda_test implements RequestHandler<Request, Response>
         }
         CpuTime c2 = getCpuUtilization();
         CpuTime cused = getCpuTimeDiff(c1, c2);
-        Response r = new Response("Success=" + request.getName(), uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
+        String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
+        Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
         return r;
     }
     
@@ -187,6 +190,87 @@ public class lambda_test implements RequestHandler<Request, Response>
     public CpuTime getCpuTimeDiff(CpuTime c1, CpuTime c2)
     {
         return new CpuTime(c2.utime - c1.utime, c2.stime-c1.stime, c2.cutime - c1.cutime, c2.cstime - c1.cstime);
+    }
+    
+    public static void main (String[] args)
+    {
+        Context c = new Context() {
+            @Override
+            public String getAwsRequestId() {
+                return "";
+            }
+
+            @Override
+            public String getLogGroupName() {
+                return "";
+            }
+
+            @Override
+            public String getLogStreamName() {
+                return "";
+            }
+
+            @Override
+            public String getFunctionName() {
+                return "";
+            }
+
+            @Override
+            public String getFunctionVersion() {
+                return "";
+            }
+
+            @Override
+            public String getInvokedFunctionArn() {
+                return "";
+            }
+
+            @Override
+            public CognitoIdentity getIdentity() {
+                return null;
+            }
+
+            @Override
+            public ClientContext getClientContext() {
+                return null;
+            }
+
+            @Override
+            public int getRemainingTimeInMillis() {
+                return 0;
+            }
+
+            @Override
+            public int getMemoryLimitInMB() {
+                return 0;
+            }
+
+            @Override
+            public LambdaLogger getLogger() {
+                return new LambdaLogger() {
+                    @Override
+                    public void log(String string) {
+                        System.out.println("LOG:" + string);
+                    }
+                };
+            }
+        };
+        lambda_test lt = new lambda_test();
+        
+        Request req = new Request("hello fred");
+        
+        int calcs = (args.length > 0 ? Integer.parseInt(args[0]) : 0);
+        int sleep = (args.length > 1 ? Integer.parseInt(args[1]) : 0);
+        int loops = (args.length > 2 ? Integer.parseInt(args[2]) : 0);
+        String name = (args.length > 3 ? args[3] : "");
+        
+        req.setCalcs(calcs);
+        req.setSleep(sleep);
+        req.setLoops(loops);
+        req.setName(name);
+        System.out.println("calcs=" + req.getCalcs() + " sleep=" + req.getSleep() + " loops=" + req.getLoops() + " getfile=" + req.getName());
+        Response resp = lt.handleRequest(req, c);
+        System.out.println(resp.toString());
     }
 
 }
