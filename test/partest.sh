@@ -14,7 +14,7 @@ callservice() {
   fi
   for (( i=1 ; i <= $totalruns; i++ ))
   do
-    json={"\"name\"":\"Fred\"",\"calcs\"":100,\"sleep\"":10,\"loops\"":10}
+    json={"\"name\"":\"Fred\"",\"calcs\"":1,\"sleep\"":0,\"loops\"":1}
     time1=( $(($(date +%s%N)/1000000)) )
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
     uuid=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 

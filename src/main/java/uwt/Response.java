@@ -5,6 +5,8 @@
  */
 package uwt;
 
+import java.lang.annotation.Native;
+
 /**
  *
  * @author wlloyd
@@ -17,6 +19,7 @@ public class Response {
     long cpuKrn;
     long cutime;
     long cstime;
+    int pid;
     
     public String getValue()
     {
@@ -74,6 +77,14 @@ public class Response {
     {
         this.error = err;
     }
+    public int getPid()
+    {
+        return pid;
+    }
+    public void setPid(int pid)
+    {
+        this.pid = pid;
+    }
     public Response(String value, String uuid)
     {
         this.value = value;
@@ -107,4 +118,6 @@ public class Response {
         return "value=" + this.getValue() + " uuid=" + this.getUuid() + " cpuusr=" + this.getCpuUsr() + " cpukrn=" + this.getCpuKrn()
                 + " cutime=" + this.getCuTime() + " cstime=" + this.getCsTime() + "\nfile=\n" + this.getValue();
     }
+    
+
 }

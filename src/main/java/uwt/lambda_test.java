@@ -14,14 +14,13 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 /**
@@ -84,6 +83,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         CpuTime cused = getCpuTimeDiff(c1, c2);
         String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
+        r.setPid(getPID());
         return r;
     }
     
@@ -273,4 +273,24 @@ public class lambda_test implements RequestHandler<Request, Response>
         System.out.println(resp.toString());
     }
 
+    public int getPID() 
+    {
+        try
+        {
+            java.lang.management.RuntimeMXBean runtime = java.lang.management.ManagementFactory.getRuntimeMXBean();
+            java.lang.reflect.Field jvm = runtime.getClass().getDeclaredField("jvm");
+            jvm.setAccessible(true);
+            sun.management.VMManagement mgmt = (sun.management.VMManagement) jvm.get(runtime);
+            java.lang.reflect.Method pid_method = mgmt.getClass().getDeclaredMethod("getProcessId");
+            pid_method.setAccessible(true);
+
+            return ((Integer) pid_method.invoke(mgmt)).intValue();
+        }
+        catch (Exception e)
+        {
+            return 0;
+        }
+    }    
+
+    
 }
