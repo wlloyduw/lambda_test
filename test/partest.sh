@@ -1,6 +1,7 @@
 #!/bin/bash
 totalruns=$1
 threads=$2
+containers=()
 
 callservice() {
   totalruns=$1
@@ -14,7 +15,25 @@ callservice() {
   fi
   for (( i=1 ; i <= $totalruns; i++ ))
   do
-    json={"\"name\"":\"\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+    #CALCS - uncomment JSON line for desired number of calcs
+    #no calcs
+    #json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
+
+    #very light calcs
+    json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
+
+    #light calcs 
+    #json={"\"name\"":\"\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+
+    #medium calcs 
+    #json={"\"name\"":\"\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
+
+    #somewhat heavy calcs 
+    #json={"\"name\"":\"\"",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+
+    #heavy calcs 
+    #json={"\"name\"":\"\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+
     time1=( $(($(date +%s%N)/1000000)) )
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
     output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
@@ -29,6 +48,7 @@ callservice() {
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
     sleeptimems=`echo $sleeptime/$onesecond | bc -l`
     echo "$i,$threadid,$uuid,$pid,$cpuusr,$cpukrn,$elapsedtime,$sleeptimems"
+    echo "$uuid" >> .uniqcont
     if (( $sleeptime > 0 ))
     then
       sleep $sleeptimems
@@ -46,6 +66,20 @@ do
   arpt+=($runsperthread)
 done
 parallel --no-notice -j $threads -k callservice {1} {#} ::: "${arpt[@]}"
+#exit
+
+# determine unique number of containers used or created
+filename=".uniqcont"
+while read -r line
+do
+    uuid="$line"
+    #echo "Uuid read from file - $uuid"
+    if [[ ! " ${containers[@]} " =~ " ${uuid} " ]]; then
+      containers+=($uuid)
+    fi
+done < "$filename"
+echo "Containers=${#containers[@]}"
+rm .uniqcont
 
 
 
