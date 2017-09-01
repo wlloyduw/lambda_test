@@ -10,19 +10,25 @@ callservice() {
   onesecond=1000
   if [ $threadid -eq 1 ]
   then
-    echo "run_id,thread_id,uuid,elapsed_time,sleep_time_ms"
+    echo "run_id,thread_id,uuid,pid,cpuusr,cpukrn,elapsed_time,sleep_time_ms"
   fi
   for (( i=1 ; i <= $totalruns; i++ ))
   do
-    json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
+    json={"\"name\"":\"\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
     time1=( $(($(date +%s%N)/1000000)) )
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
-    uuid=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
+    output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
+    #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
+    uuid=`echo $output | cut -d':' -f 3 | cut -d'"' -f 2`
+    cpuusr=`echo $output | cut -d':' -f 4 | cut -d',' -f 1`
+    cpukrn=`echo $output | cut -d':' -f 5 | cut -d',' -f 1`
+    pid=`echo $output | cut -d':' -f 6 | cut -d',' -f 1`
+    
     time2=( $(($(date +%s%N)/1000000)) )
     elapsedtime=`expr $time2 - $time1`
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
     sleeptimems=`echo $sleeptime/$onesecond | bc -l`
-    echo "$i,$threadid,$uuid,$elapsedtime,$sleeptimems"
+    echo "$i,$threadid,$uuid,$pid,$cpuusr,$cpukrn,$elapsedtime,$sleeptimems"
     if (( $sleeptime > 0 ))
     then
       sleep $sleeptimems
