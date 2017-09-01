@@ -22,7 +22,7 @@ callservice() {
     #json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
 
     #very light calcs
-    json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
     #light calcs 
     #json={"\"name\"":\"\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
@@ -35,6 +35,15 @@ callservice() {
 
     #heavy calcs 
     #json={"\"name\"":\"\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+
+    #many calcs no mem - results in more kernel time
+    json={"\"name\"":\"\"",\"calcs\"":20,\"sleep\"":0,\"loops\"":500000}
+
+    #many calcs low mem
+    #json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
+
+    #many calcs higher mem
+    #json={"\"name\"":\"\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":1000}
 
     time1=( $(($(date +%s%N)/1000000)) )
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
@@ -106,7 +115,7 @@ runspercont=`echo $totalruns / ${#containers[@]} | bc -l`
 avgtime=`echo $alltimes / $totalruns | bc -l`
 #echo "Average time=$avgtime"
 rm .uniqcont
-echo "uuid,uses,totaltime,avgtime,stdiffsq"
+echo "uuid,uses,totaltime,avgruntime_cont,uses_minus_avguses_sq"
 total=0
 for ((i=0;i < ${#containers[@]};i++)) {
   avg=`echo ${ctimes[$i]} / ${cuses[$i]} | bc -l`
