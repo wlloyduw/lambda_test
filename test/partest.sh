@@ -19,10 +19,10 @@ callservice() {
   do
     #CALCS - uncomment JSON line for desired number of calcs
     #no calcs
-    json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
+    #json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
 
     #very light calcs
-    #json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
     #light calcs 
     #json={"\"name\"":\"\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
@@ -76,6 +76,7 @@ while read -r line
 do
     uuid=`echo $line | cut -d',' -f 1`
     time=`echo $line | cut -d',' -f 2`
+    alltimes=`expr $alltimes + $time`
     #echo "Uuid read from file - $uuid"
     # if uuid is already in array
     found=0
@@ -99,14 +100,28 @@ do
     #  containers+=($uuid)
     #fi
 done < "$filename"
-echo "Containers=${#containers[@]}"
+#echo "Containers=${#containers[@]}"
+runspercont=`echo $totalruns / ${#containers[@]} | bc -l`
+#echo "Runs per containers=$runspercont"
+avgtime=`echo $alltimes / $totalruns | bc -l`
+#echo "Average time=$avgtime"
 rm .uniqcont
-echo "uuid,uses,totaltime,avgtime"
+echo "uuid,uses,totaltime,avgtime,stdiffsq"
+total=0
 for ((i=0;i < ${#containers[@]};i++)) {
   avg=`echo ${ctimes[$i]} / ${cuses[$i]} | bc -l`
-  echo "${containers[$i]},${cuses[$i]},${ctimes[$i]},$avg"
+  stdiff=`echo ${cuses[$i]} - $runspercont | bc -l` 
+  stdiffsq=`echo "$stdiff * $stdiff" | bc -l` 
+  total=`echo $total + $stdiffsq | bc -l`
+  #echo "$total + $stdiffsq"
+  echo "${containers[$i]},${cuses[$i]},${ctimes[$i]},$avg,$stdiffsq"
   #echo "${containers[$i]},${cuses[$i]},$avg"
 }
+stdev=`echo $total / ${#containers[@]} | bc -l`
+echo "containers,avgruntime,runs_per_container,stdev"
+echo "${#containers[@]},$avgtime,$runspercont,$stdev"
+#echo "Standard deviation (runs per container)=$stdev"
+#echo "lower is better"
 
 
 
