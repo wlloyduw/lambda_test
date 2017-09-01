@@ -2,6 +2,7 @@
 totalruns=$1
 threads=$2
 containers=()
+cuses=()
 
 callservice() {
   totalruns=$1
@@ -17,10 +18,10 @@ callservice() {
   do
     #CALCS - uncomment JSON line for desired number of calcs
     #no calcs
-    #json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
+    json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
 
     #very light calcs
-    json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
     #light calcs 
     #json={"\"name\"":\"\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
@@ -74,12 +75,32 @@ while read -r line
 do
     uuid="$line"
     #echo "Uuid read from file - $uuid"
-    if [[ ! " ${containers[@]} " =~ " ${uuid} " ]]; then
-      containers+=($uuid)
+    # if uuid is already in array
+    found=0
+    for ((i=0;i < ${#containers[@]};i++)) {
+        if [ "${containers[$i]}" == "${uuid}" ]; then
+            (( cuses[$i]++ ))
+            found=1
+        fi
+    }
+    if [ $found != 1 ]; then
+        containers+=($uuid)
+        cuses+=(1)
     fi
+    #if [[ " ${containers[@]} " =~ " ${uuid} " ]]; then
+    #  containers+=($uuid)
+    #fi
+    # add element to array if not already in array
+    #if [[ ! " ${containers[@]} " =~ " ${uuid} " ]]; then
+    #  containers+=($uuid)
+    #fi
 done < "$filename"
 echo "Containers=${#containers[@]}"
 rm .uniqcont
+echo "uuid,uses"
+for ((i=0;i < ${#containers[@]};i++)) {
+  echo "${containers[$i]},${cuses[$i]}"
+}
 
 
 
