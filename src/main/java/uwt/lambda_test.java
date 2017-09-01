@@ -34,6 +34,7 @@ public class lambda_test implements RequestHandler<Request, Response>
     
     public Response handleRequest(Request request, Context context) {
         CpuTime c1 = getCpuUtilization();
+        VmCpuStat v1 = getVmCpuStat();
         String uuid = "unset";
         LambdaLogger logger = context.getLogger();
         logger.log("Request for file=" + request.getName());
@@ -80,9 +81,15 @@ public class lambda_test implements RequestHandler<Request, Response>
             }
         }
         CpuTime c2 = getCpuUtilization();
+        VmCpuStat v2 = getVmCpuStat();
         CpuTime cused = getCpuTimeDiff(c1, c2);
+        VmCpuStat vused = getVmCpuStatDiff(v1, v2);
+        double vuptime = getUpTime(v2);
         String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
-        Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
+        //Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
+        Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
+                                  vused.cpunice, vused.cpukrn, vused.cpuidle, vused.cpuiowait, vused.cpuirq, 
+                                  vused.cpusirq, vused.cpusteal, vuptime);
         r.setPid(getPID());
         return r;
     }
@@ -185,6 +192,84 @@ public class lambda_test implements RequestHandler<Request, Response>
         }
         else
             return new CpuTime();
+    }
+    
+    class VmCpuStat
+    {
+        long cpuusr;
+        long cpunice;
+        long cpukrn;
+        long cpuidle;
+        long cpuiowait;
+        long cpuirq;
+        long cpusirq;
+        long cpusteal;
+        VmCpuStat(long cpuusr, long cpunice, long cpukrn, long cpuidle, 
+                  long cpuiowait, long cpuirq, long cpusirq, long cpusteal)
+        {
+            this.cpuusr = cpuusr;
+            this.cpunice = cpunice;
+            this.cpukrn = cpukrn;
+            this.cpuidle = cpuidle;
+            this.cpuiowait = cpuiowait;
+            this.cpuirq = cpuirq;
+            this.cpusirq = cpusirq;
+            this.cpusteal = cpusteal;
+        }
+        VmCpuStat() { }
+    }
+    public VmCpuStat getVmCpuStat()
+    {
+        String filename = "/proc/stat";
+        File f = new File(filename);
+        Path p = Paths.get(filename);
+        String text = "";
+        StringBuffer sb = new StringBuffer();
+        if (f.exists()) 
+        {
+            try (BufferedReader br = Files.newBufferedReader(p))
+            {
+                text = br.readLine();
+                br.close();
+            }
+            catch (IOException ioe)
+            {
+                sb.append("Error reading file=" + filename);
+            }
+            String params[] = text.split(" ");
+            return new VmCpuStat(Long.parseLong(params[2]),
+                                 Long.parseLong(params[3]),
+                                 Long.parseLong(params[4]),
+                                 Long.parseLong(params[5]),
+                                 Long.parseLong(params[6]),
+                                 Long.parseLong(params[7]),
+                                 Long.parseLong(params[8]),
+                                 Long.parseLong(params[9]));
+        }
+        else
+            return new VmCpuStat();
+    }
+    
+    public double getUpTime(VmCpuStat vmcpustat)
+    {
+        double time = vmcpustat.cpuidle +
+                      vmcpustat.cpuiowait +
+                      vmcpustat.cpuirq +
+                      vmcpustat.cpukrn +
+                      vmcpustat.cpunice +
+                      vmcpustat.cpusirq +
+                      vmcpustat.cpusteal +
+                      vmcpustat.cpuusr;
+        time = time / 100;
+        time = time / 2;
+        return time;
+    }
+    
+    public VmCpuStat getVmCpuStatDiff(VmCpuStat v1, VmCpuStat v2)
+    {
+        return new VmCpuStat(v2.cpuusr - v1.cpuusr, v2.cpunice - v1.cpunice, v2.cpukrn - v1.cpukrn,
+                             v2.cpuidle - v1.cpuidle, v2.cpuiowait - v1.cpuiowait, v2.cpuirq - v1.cpuirq,
+                             v2.cpusirq - v1.cpusirq, v2.cpusteal - v1.cpusteal);
     }
     
     public CpuTime getCpuTimeDiff(CpuTime c1, CpuTime c2)

@@ -20,6 +20,15 @@ public class Response {
     long cutime;
     long cstime;
     int pid;
+    long vmcpuusr;
+    long vmcpunice;
+    long vmcpukrn;
+    long vmcpuidle;
+    long vmcpuiowait;
+    long vmcpuirq;
+    long vmcpusirq;
+    long vmcpusteal;
+    double vmuptime;
     
     public String getValue()
     {
@@ -85,6 +94,81 @@ public class Response {
     {
         this.pid = pid;
     }
+    
+    
+    public long getVmcpuusr()
+    {
+        return vmcpuusr;
+    }
+    public void setVmCpuusr(long vmcpuusr)
+    {
+        this.vmcpuusr = vmcpuusr;
+    }
+    public long getVmcpunice()
+    {
+        return vmcpunice;
+    }
+    public void setVmcpunice(long vmcpunice)
+    {
+        this.vmcpunice = vmcpunice;
+    }
+    public long getVmcpukrn()
+    {
+        return vmcpukrn;
+    }
+    public void setVmcpukrn(long vmcpukrn)
+    {
+        this.vmcpukrn = vmcpukrn;
+    }
+    public long getVmcpuidle()
+    {
+        return vmcpuidle;
+    }
+    public void setVmcpuidle(long vmcpuidle)
+    {
+        this.vmcpuidle = vmcpuidle;
+    }
+    public long getVmcpuiowait()
+    {
+        return vmcpuiowait;
+    }
+    public void setVmcpuiowait(long vmcpuiowait)
+    {
+        this.vmcpuiowait = vmcpuiowait;
+    }
+    public long getVmcpuirq()
+    {
+        return vmcpuirq;
+    }
+    public void setVmcpuirq(long vmcpuirq)
+    {
+        this.vmcpuirq = vmcpuirq;
+    }
+    public long getVmcpusirq()
+    {
+        return vmcpusirq;
+    }
+    public void setVmcpusirq(long vmcpusirq)
+    {
+        this.vmcpusirq = vmcpusirq;
+    }
+    public long getVmcpusteal()
+    {
+        return vmcpusteal;
+    }
+    public void setVmcpusteal(long vmcpusteal)
+    {
+        this.vmcpusteal = vmcpusteal;
+    }
+    public double getVmuptime()
+    {
+        return this.vmuptime;
+    }
+    public void setVmuptime(double vmuptime)
+    {
+        this.vmuptime = vmuptime;
+    }
+        
     public Response(String value, String uuid)
     {
         this.value = value;
@@ -106,6 +190,27 @@ public class Response {
         this.cutime = cutime;
         this.cstime = cstime;
     }
+    public Response(String value, String uuid, long cpuusr, long cpukrn, long cutime, long cstime,
+                    long vmcpuusr, long vmcpunice, long vmcpukrn, long vmcpuidle, long vmcpuiowait,
+                    long vmcpuirq, long vmcpusirq, long vmcpusteal, double vuptime)
+    {
+        this.value = value;
+        this.uuid = uuid;
+        this.cpuUsr = cpuusr;
+        this.cpuKrn = cpukrn;
+        this.cutime = cutime;
+        this.cstime = cstime;
+        this.vmcpuusr = vmcpuusr;
+        this.vmcpunice = vmcpunice;
+        this.vmcpukrn = vmcpukrn;
+        this.vmcpuidle = vmcpuidle;
+        this.vmcpuiowait = vmcpuiowait;
+        this.vmcpuirq = vmcpuirq;
+        this.vmcpusirq = vmcpusirq;
+        this.vmcpusteal = vmcpusteal;  
+        this.vmuptime = vuptime;
+    }
+
     
     public Response()
     {
@@ -116,7 +221,9 @@ public class Response {
     public String toString()
     {
         return "value=" + this.getValue() + "\nuuid=" + this.getUuid() + "\ncpuusr=" + this.getCpuUsr() + "\ncpukrn=" + this.getCpuKrn()
-                + "\ncutime=" + this.getCuTime() + "\ncstime=" + this.getCsTime() + "\nfile=\n" + this.getValue();
+                + "\ncutime=" + this.getCuTime() + "\ncstime=" + this.getCsTime() + "\nfile=\n" + this.getValue()
+                + "\nvmuptime=" + this.getVmuptime() + "\nvmcpusteal=" + this.getVmcpusteal() + "\nvmcpuusr=" 
+                + this.getVmcpuusr() + "\nvmcpukrn=" + this.getVmcpukrn() + "\nvmcpuidle=" + this.getVmcpuidle();
     }
     
 

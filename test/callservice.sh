@@ -1,6 +1,6 @@
 #!/bin/bash
 
-json={"\"name\"":\"\/proc\/2\/stat\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 
 #call using curl 
 curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null 
