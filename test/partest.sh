@@ -3,6 +3,7 @@ totalruns=$1
 threads=$2
 containers=()
 cuses=()
+ctimes=()
 
 callservice() {
   totalruns=$1
@@ -49,7 +50,7 @@ callservice() {
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
     sleeptimems=`echo $sleeptime/$onesecond | bc -l`
     echo "$i,$threadid,$uuid,$pid,$cpuusr,$cpukrn,$elapsedtime,$sleeptimems"
-    echo "$uuid" >> .uniqcont
+    echo "$uuid,$elapsedtime" >> .uniqcont
     if (( $sleeptime > 0 ))
     then
       sleep $sleeptimems
@@ -73,19 +74,22 @@ parallel --no-notice -j $threads -k callservice {1} {#} ::: "${arpt[@]}"
 filename=".uniqcont"
 while read -r line
 do
-    uuid="$line"
+    uuid=`echo $line | cut -d',' -f 1`
+    time=`echo $line | cut -d',' -f 2`
     #echo "Uuid read from file - $uuid"
     # if uuid is already in array
     found=0
     for ((i=0;i < ${#containers[@]};i++)) {
         if [ "${containers[$i]}" == "${uuid}" ]; then
             (( cuses[$i]++ ))
+            ctimes[$i]=`expr ${ctimes[$i]} + $time`
             found=1
         fi
     }
     if [ $found != 1 ]; then
         containers+=($uuid)
         cuses+=(1)
+        ctimes+=($time)
     fi
     #if [[ " ${containers[@]} " =~ " ${uuid} " ]]; then
     #  containers+=($uuid)
@@ -97,9 +101,11 @@ do
 done < "$filename"
 echo "Containers=${#containers[@]}"
 rm .uniqcont
-echo "uuid,uses"
+echo "uuid,uses,totaltime,avgtime"
 for ((i=0;i < ${#containers[@]};i++)) {
-  echo "${containers[$i]},${cuses[$i]}"
+  avg=`echo ${ctimes[$i]} / ${cuses[$i]} | bc -l`
+  echo "${containers[$i]},${cuses[$i]},${ctimes[$i]},$avg"
+  #echo "${containers[$i]},${cuses[$i]},$avg"
 }
 
 
