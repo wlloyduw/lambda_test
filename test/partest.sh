@@ -18,40 +18,31 @@ callservice() {
   for (( i=1 ; i <= $totalruns; i++ ))
   do
     #CALCS - uncomment JSON line for desired number of calcs
-    #no calcs
-    #json={"\"name\"":\"\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
+    #(0) - no calcs
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
 
-    #very light calcs
-    #json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
+    #(1) - very light calcs
+    #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
-    #light calcs 
-    #json={"\"name\"":\"\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+    #(2) - light calcs 
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
-    #medium calcs 
-    #json={"\"name\"":\"\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
-    #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
+    #(3) - medium calcs 
+    json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
-    #somewhat heavy calcs 
-    #json={"\"name\"":\"\"",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    #(4) - somewhat heavy calcs 
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
-    #heavy calcs 
-    #json={"\"name\"":\"\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+    #(5) - heavy calcs 
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 
-    #many calcs no mem - results in more kernel time
-    #json={"\"name\"":\"\"",\"calcs\"":20,\"sleep\"":0,\"loops\"":500000}
+    #(6) - many calcs no memory stress - results in more kernel time
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":20,\"sleep\"":0,\"loops\"":500000}
 
-    #many calcs low mem
-    #json={"\"name\"":\"\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
-    json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
-    #json={"\"name\"":\"\/proc\/stat\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
+    #(7) - many calcs low memory stress
+    #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
 
-    #many calcs higher mem
-    #json={"\"name\"":\"\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":1000}
+    #(8) - many calcs higher memory stress
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":1000}
 
     time1=( $(($(date +%s%N)/1000000)) )
