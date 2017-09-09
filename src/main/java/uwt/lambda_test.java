@@ -84,7 +84,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         VmCpuStat v2 = getVmCpuStat();
         CpuTime cused = getCpuTimeDiff(c1, c2);
         VmCpuStat vused = getVmCpuStatDiff(v1, v2);
-        double vuptime = getUpTime(v2);
+        long vuptime = getUpTime(v2);
         String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
         //Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
@@ -204,6 +204,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         long cpuirq;
         long cpusirq;
         long cpusteal;
+        long btime;
         VmCpuStat(long cpuusr, long cpunice, long cpukrn, long cpuidle, 
                   long cpuiowait, long cpuirq, long cpusirq, long cpusteal)
         {
@@ -230,39 +231,50 @@ public class lambda_test implements RequestHandler<Request, Response>
             try (BufferedReader br = Files.newBufferedReader(p))
             {
                 text = br.readLine();
+                String params[] = text.split(" ");
+                VmCpuStat vcs = new VmCpuStat(Long.parseLong(params[2]),
+                                              Long.parseLong(params[3]),
+                                              Long.parseLong(params[4]),
+                                              Long.parseLong(params[5]),
+                                              Long.parseLong(params[6]),
+                                              Long.parseLong(params[7]),
+                                              Long.parseLong(params[8]),
+                                              Long.parseLong(params[9]));
+                while ((text = br.readLine()) != null && text.length() != 0) {
+                    // get boot time in ms since epoch
+                    if (text.contains("btime"))
+                    {
+                        String prms[] = text.split(" ");
+                        vcs.btime = Long.parseLong(prms[1]);
+                    }
+                }
                 br.close();
+                return vcs;
             }
             catch (IOException ioe)
             {
                 sb.append("Error reading file=" + filename);
+                return new VmCpuStat();
             }
-            String params[] = text.split(" ");
-            return new VmCpuStat(Long.parseLong(params[2]),
-                                 Long.parseLong(params[3]),
-                                 Long.parseLong(params[4]),
-                                 Long.parseLong(params[5]),
-                                 Long.parseLong(params[6]),
-                                 Long.parseLong(params[7]),
-                                 Long.parseLong(params[8]),
-                                 Long.parseLong(params[9]));
         }
         else
             return new VmCpuStat();
     }
     
-    public double getUpTime(VmCpuStat vmcpustat)
+    public long getUpTime(VmCpuStat vmcpustat)
     {
-        double time = vmcpustat.cpuidle +
-                      vmcpustat.cpuiowait +
-                      vmcpustat.cpuirq +
-                      vmcpustat.cpukrn +
-                      vmcpustat.cpunice +
-                      vmcpustat.cpusirq +
-                      vmcpustat.cpusteal +
-                      vmcpustat.cpuusr;
-        time = time / 100;
-        time = time / 2;
-        return time;
+//        double time = vmcpustat.cpuidle +
+//                      vmcpustat.cpuiowait +
+//                      vmcpustat.cpuirq +
+//                      vmcpustat.cpukrn +
+//                      vmcpustat.cpunice +
+//                      vmcpustat.cpusirq +
+//                      vmcpustat.cpusteal +
+//                      vmcpustat.cpuusr;
+//        time = time / 100;
+//        time = time / 2;
+        return vmcpustat.btime;
+        //return time;
     }
     
     public VmCpuStat getVmCpuStatDiff(VmCpuStat v1, VmCpuStat v2)

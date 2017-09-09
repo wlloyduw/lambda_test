@@ -28,7 +28,7 @@ public class Response {
     long vmcpuirq;
     long vmcpusirq;
     long vmcpusteal;
-    double vmuptime;
+    long vmuptime;
     
     public String getValue()
     {
@@ -160,11 +160,11 @@ public class Response {
     {
         this.vmcpusteal = vmcpusteal;
     }
-    public double getVmuptime()
+    public long getVmuptime()
     {
         return this.vmuptime;
     }
-    public void setVmuptime(double vmuptime)
+    public void setVmuptime(long vmuptime)
     {
         this.vmuptime = vmuptime;
     }
@@ -192,7 +192,7 @@ public class Response {
     }
     public Response(String value, String uuid, long cpuusr, long cpukrn, long cutime, long cstime,
                     long vmcpuusr, long vmcpunice, long vmcpukrn, long vmcpuidle, long vmcpuiowait,
-                    long vmcpuirq, long vmcpusirq, long vmcpusteal, double vuptime)
+                    long vmcpuirq, long vmcpusirq, long vmcpusteal, long vuptime)
     {
         this.value = value;
         this.uuid = uuid;

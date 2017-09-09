@@ -25,10 +25,10 @@ callservice() {
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
     #(2) - light calcs 
-    #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
     #(3) - medium calcs 
-    json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs 
     #json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
