@@ -1,19 +1,13 @@
 #!/bin/bash
 
-totalruns=$1
 
 json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
 #call using curl 
 
-  for (( i=1 ; i <= $totalruns; i++ ))
-  do
 
-output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null` 
+curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null
 
-echo $output | cut -d',' -f 4
-
-  done
 
 #call from aws gateway api
 #aws apigateway test-invoke-method --rest-api-id ue5e0irnce --resource-id dlxjg7 --http-method POST --path-with-query-string '/test' --body $json
