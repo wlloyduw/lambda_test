@@ -1,4 +1,8 @@
 #!/bin/bash
+# script requires gnu parallel package, and the bash calculator
+#
+# apt install parallel bc
+#
 totalruns=$1
 threads=$2
 containers=()
@@ -25,10 +29,10 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
     #(2) - light calcs 
-    json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
     #(3) - medium calcs 
-    #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs 
     #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
@@ -37,7 +41,7 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 
     #(6) - many calcs no memory stress - results in more kernel time
-    #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":500000}
+    #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
 
     #(7) - many calcs low memory stress
     #json={"\"name\"":"\"\",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
