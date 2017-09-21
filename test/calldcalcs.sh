@@ -1,14 +1,16 @@
 #!/bin/bash
 
 
-json={"\"name\"":\"\/proc\/cpuinfo\"",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+json={"\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+#json={"\"name\"":\"\/proc\/cpuinfo\"",\"number\"":1000,\"sleep\"":0,\"loops\"":20}
+#json={"\"Number\"":1000}
 echo $json
 
 #call using curl 
 
 
-#curl -H "Content-Type: application/json" -X POST -d  $json https://localhost:18081/fibo/calcs 
-curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null
+curl -H "Content-Type: application/json" -X POST http://localhost:18081/fibo/calcs -d $json
+#curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null
 
 echo "done."
 

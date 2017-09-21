@@ -174,7 +174,9 @@ stdev=`echo $total / ${#containers[@]} | bc -l`
 #echo "containers,avgruntime,runs_per_container,stdev"
 #echo "${#containers[@]},$avgtime,$runspercont,$stdev"
 # hosts info
-echo "host,uses,containers,totaltime,avgruntime_host,uses_minus_avguses_sq"
+currtime=$(date +%s)
+echo "Current time of test=$currtime"
+echo "host,host_up_time,uses,containers,totaltime,avgruntime_host,uses_minus_avguses_sq"
 total=0
 for ((i=0;i < ${#hosts[@]};i++)) {
   avg=`echo ${htimes[$i]} / ${huses[$i]} | bc -l`
@@ -182,13 +184,14 @@ for ((i=0;i < ${#hosts[@]};i++)) {
   stdiffsq=`echo "$stdiff * $stdiff" | bc -l` 
   total=`echo $total + $stdiffsq | bc -l`
   ccount=0
+  uptime=`echo $currtime - ${hosts[$i]} | bc -l`
   for ((j=0;j < ${#containers[@]};j++)) {
       if [ ${hosts[$i]} == ${chosts[$j]} ]
       then
           (( ccount ++ ))
       fi
   } 
-  echo "${hosts[$i]},${huses[$i]},$ccount,${htimes[$i]},$avg,$stdiffsq"
+  echo "${hosts[$i]},$uptime,${huses[$i]},$ccount,${htimes[$i]},$avg,$stdiffsq"
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
 #echo "hosts,avgruntime,runs_per_host,stdev"
