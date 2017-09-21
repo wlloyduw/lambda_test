@@ -1,8 +1,8 @@
 # total runs to perform
-totalruns=10
+totalruns=1
 
 # time to sleep in seconds between runs
-sleep=10
+sleep=$1
 
 for (( i=1 ; i <= $totalruns; i++ ))
 do
@@ -12,7 +12,7 @@ do
   for (( j=1 ; j <= $sleep; j++ ))
   do
     sleep 1
-    echo -n "."
+    #echo -n "."
   done
   echo ""
 done

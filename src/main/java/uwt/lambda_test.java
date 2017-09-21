@@ -391,5 +391,6 @@ public class lambda_test implements RequestHandler<Request, Response>
 
     private class test1 { }
     private class test2 { }
+    private class test3 { }
     
 }
