@@ -17,7 +17,7 @@ callservice() {
   onesecond=1000
   if [ $threadid -eq 1 ]
   then
-    echo "run_id,thread_id,uuid,cputype,cpusteal,vmuptime,pid,cpuusr,cpukrn,elapsed_time,sleep_time_ms"
+    echo "run_id,thread_id,uuid,cputype,cpusteal,vmuptime,pid,cpuusr,cpukrn,elapsed_time,sleep_time_ms,new_container"
   fi
   for (( i=1 ; i <= $totalruns; i++ ))
   do
@@ -52,8 +52,8 @@ callservice() {
     time1=( $(($(date +%s%N)/1000000)) )
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
     ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2/test 2>/dev/null`
-    output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
-    ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
+    ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
+    output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
 
     # parsing when /proc/cpuinfo is not requested  
@@ -80,13 +80,15 @@ callservice() {
     #cputype=`echo $output | cut -d',' -f 1 | cut -d':' -f 7 | cut -d'\' -f 1 | xargs`
     cpusteal=`echo $output | cut -d',' -f 13 | cut -d':' -f 2`
     vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
+    newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
+    
     
     time2=( $(($(date +%s%N)/1000000)) )
     elapsedtime=`expr $time2 - $time1`
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
     sleeptimems=`echo $sleeptime/$onesecond | bc -l`
-    echo "$i,$threadid,$uuid,$cputype,$cpusteal,$vuptime,$pid,$cpuusr,$cpukrn,$elapsedtime,$sleeptimems"
-    echo "$uuid,$elapsedtime,$vuptime" >> .uniqcont
+    echo "$i,$threadid,$uuid,$cputype,$cpusteal,$vuptime,$pid,$cpuusr,$cpukrn,$elapsedtime,$sleeptimems,$newcont"
+    echo "$uuid,$elapsedtime,$vuptime,$newcont" >> .uniqcont
     if (( $sleeptime > 0 ))
     then
       sleep $sleeptimems
@@ -105,6 +107,7 @@ do
 done
 parallel --no-notice -j $threads -k callservice {1} {#} ::: "${arpt[@]}"
 #exit
+newconts=0
 
 # determine unique number of containers used or created
 filename=".uniqcont"
@@ -113,10 +116,12 @@ do
     uuid=`echo $line | cut -d',' -f 1`
     time=`echo $line | cut -d',' -f 2`
     host=`echo $line | cut -d',' -f 3`
+    isnewcont=`echo $line | cut -d',' -f 4`
     alltimes=`expr $alltimes + $time`
     #echo "Uuid read from file - $uuid"
     # if uuid is already in array
     found=0
+    (( newconts += isnewcont))
     for ((i=0;i < ${#containers[@]};i++)) {
         if [ "${containers[$i]}" == "${uuid}" ]; then
             (( cuses[$i]++ ))
@@ -198,8 +203,8 @@ for ((i=0;i < ${#hosts[@]};i++)) {
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
 #echo "hosts,avgruntime,runs_per_host,stdev"
 #echo "${#hosts[@]},$avgtime,$runsperhost,$stdev"
-echo "containers,hosts,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
-echo "${#containers[@]},${#hosts[@]},$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
+echo "containers,newcontainers,hosts,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
+echo "${#containers[@]},$newconts,${#hosts[@]},$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
 
 
 

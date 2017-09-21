@@ -8,8 +8,8 @@ echo $json
 
 
 #curl -H "Content-Type: application/json" -X POST -d  $json https://localhost:18081/fibo/calcs 
-#curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null
-curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2 2>/dev/null
+curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null
+#curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2 2>/dev/null
 echo "done."
 
 #call from aws gateway api

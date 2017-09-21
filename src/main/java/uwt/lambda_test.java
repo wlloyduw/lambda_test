@@ -33,6 +33,7 @@ public class lambda_test implements RequestHandler<Request, Response>
     static Charset CHARSET = Charset.forName("US-ASCII");
     
     public Response handleRequest(Request request, Context context) {
+        int newcontainer = 0;
         CpuTime c1 = getCpuUtilization();
         VmCpuStat v1 = getVmCpuStat();
         String uuid = "unset";
@@ -60,6 +61,7 @@ public class lambda_test implements RequestHandler<Request, Response>
                 uuid = UUID.randomUUID().toString();
                 bw.write(uuid);
                 bw.close();
+                newcontainer = 1;
             }
             catch (IOException ioe)
             {
@@ -89,7 +91,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         //Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
                                   vused.cpunice, vused.cpukrn, vused.cpuidle, vused.cpuiowait, vused.cpuirq, 
-                                  vused.cpusirq, vused.cpusteal, vuptime);
+                                  vused.cpusirq, vused.cpusteal, vuptime, newcontainer);
         r.setPid(getPID());
         return r;
     }
@@ -391,6 +393,6 @@ public class lambda_test implements RequestHandler<Request, Response>
 
     private class test1 { }
     private class test2 { }
-    private class test3 { }
+    private class test { }
     
 }

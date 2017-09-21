@@ -29,6 +29,7 @@ public class Response {
     long vmcpusirq;
     long vmcpusteal;
     long vmuptime;
+    int newcontainer;
     
     public String getValue()
     {
@@ -168,6 +169,14 @@ public class Response {
     {
         this.vmuptime = vmuptime;
     }
+    public int getNewcontainer()
+    {
+        return this.newcontainer;
+    }
+    public void setNewcontainer(int newcontainer)
+    {
+        this.newcontainer = newcontainer;
+    }
         
     public Response(String value, String uuid)
     {
@@ -192,7 +201,7 @@ public class Response {
     }
     public Response(String value, String uuid, long cpuusr, long cpukrn, long cutime, long cstime,
                     long vmcpuusr, long vmcpunice, long vmcpukrn, long vmcpuidle, long vmcpuiowait,
-                    long vmcpuirq, long vmcpusirq, long vmcpusteal, long vuptime)
+                    long vmcpuirq, long vmcpusirq, long vmcpusteal, long vuptime, int newcontainer)
     {
         this.value = value;
         this.uuid = uuid;
@@ -209,6 +218,7 @@ public class Response {
         this.vmcpusirq = vmcpusirq;
         this.vmcpusteal = vmcpusteal;  
         this.vmuptime = vuptime;
+        this.newcontainer = newcontainer;
     }
 
     
