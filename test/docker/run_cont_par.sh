@@ -14,7 +14,7 @@ parcont() {
   fi
 
   time1=( $(($(date +%s%N)/1000000)) )
-  docker run -m $memory --cpus=$cpu --rm lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20 2>/dev/null
+  docker run -m $memory --cpus=$cpu --rm lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20 >/dev/null 2>/dev/null
   #docker run -it -m $memory --cpus=$cpu lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20 2>/dev/null
   #sleep .1
   time2=( $(($(date +%s%N)/1000000)) )
@@ -29,7 +29,7 @@ parcont() {
 }
 export -f parcont
 
-docker build -t lambdatest .
+docker build -t lambdatest . >/dev/null
 
 #time docker run -it --rm lambdatest 
 #docker run -it -m 128m --rm lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20
