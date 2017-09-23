@@ -6,11 +6,12 @@ parcont() {
   memory=$2
   cpu=$3
   threadid=$1
+  threads=$4
   onesecond=1000
   #echo "in parcont... $cpu $memory"
   if [ $threadid -eq 1 ]
   then
-    echo "thread_id,elapsed_time,sleep_time_ms"
+    echo "thread_id,elapsed_time,sleep_time_ms,threads"
   fi
 
   time1=( $(($(date +%s%N)/1000000)) )
@@ -21,7 +22,7 @@ parcont() {
   elapsedtime=`expr $time2 - $time1`
   sleeptime=`echo $onesecond - $elapsedtime | bc -l`
   sleeptimems=`echo $sleeptime/$onesecond | bc -l`
-  echo "$threadid,$elapsedtime,$sleeptimems,$newcont"
+  echo "$threadid,$elapsedtime,$sleeptimems,$threads"
   if (( $sleeptime > 0 ))
   then
     sleep $sleeptimems
@@ -40,6 +41,6 @@ do
   #arpt+=($runsperthread)
 done
 
-parallel --no-notice -j $threads -k parcont {#} $memory $cpu ::: "${arpt[@]}"
+parallel --no-notice -j $threads -k parcont {#} $memory $cpu $threads ::: "${arpt[@]}"
 #parallel --no-notice -j $threads -k parcont {#}
 #sleep 10
