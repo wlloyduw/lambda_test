@@ -3,7 +3,7 @@ parcont() {
   cpu=$2
 #  for (( i=1 ; i <= $threads ; i ++))
 #  do
-    ./run_cont_par.sh 1 $memory $cpu
+    ./run_cont_par.sh 15 $memory $cpu
     sleep 10
 #  done
 }
@@ -23,4 +23,6 @@ parcont 1152m 1.5
 parcont 1280m 1.666
 parcont 1408m 1.833
 parcont 1536m 2
+
+
 

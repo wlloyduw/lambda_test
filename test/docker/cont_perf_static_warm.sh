@@ -1,14 +1,15 @@
 parcont() {
-  threads=26
   memory=$1
   cpu=$2
-  for (( i=1 ; i <= $threads ; i ++))
-  do
-    ./run_cont_par.sh $i $memory $cpu
+#  for (( i=1 ; i <= $threads ; i ++))
+#  do
+    ./run_cont_par_warm.sh $threads $memory $cpu
     sleep 10
-  done
+#  done
 }
 export -f parcont
+
+threads=$1
 
 echo "thread_id,memory,cpu,elapsed_time,sleep_time_ms,threads"
 

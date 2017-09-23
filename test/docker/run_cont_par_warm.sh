@@ -14,11 +14,11 @@ parcont() {
     aa=1
     #echo "thread_id,memory,cpu,elapsed_time,sleep_time_ms,threads"
   fi
-
+  contname="mytest$threadid"
+  docker run --name $contname -m $memory --cpus=$cpu --rm lambdatest >/dev/null 2>/dev/null & #java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20 >/dev/null 2>/dev/null
+  sleep 1
   time1=( $(($(date +%s%N)/1000000)) )
-  docker run -m $memory --cpus=$cpu --rm lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20 >/dev/null 2>/dev/null
-  #docker run -it -m $memory --cpus=$cpu lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20 2>/dev/null
-  #sleep .1
+  docker exec $contname bash -c 'java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20' > /dev/null 2>/dev/null
   time2=( $(($(date +%s%N)/1000000)) )
   elapsedtime=`expr $time2 - $time1`
   sleeptime=`echo $onesecond - $elapsedtime | bc -l`
@@ -28,10 +28,11 @@ parcont() {
   then
     sleep $sleeptimems
   fi
+  docker exec $contname bash -c 'touch /stop'
 }
 export -f parcont
 
-docker build -t lambdatest -f Dockerfile_nodaemon . >/dev/null
+docker build -t lambdatest -f Dockerfile . >/dev/null
 
 #time docker run -it --rm lambdatest 
 #docker run -it -m 128m --rm lambdatest java -cp lambda_test-1.0-SNAPSHOT.jar uwt.lambda_test 25000 0 20
