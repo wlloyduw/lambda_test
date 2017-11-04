@@ -56,12 +56,12 @@ public class lambda_test implements RequestHandler<Request, Response>
         }
         else
         {
+            newcontainer = 1;            
             try (BufferedWriter bw = Files.newBufferedWriter(p, StandardCharsets.US_ASCII, StandardOpenOption.CREATE_NEW))
             {
                 uuid = UUID.randomUUID().toString();
                 bw.write(uuid);
                 bw.close();
-                newcontainer = 1;
             }
             catch (IOException ioe)
             {
