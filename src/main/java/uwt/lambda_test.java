@@ -14,7 +14,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -87,7 +87,8 @@ public class lambda_test implements RequestHandler<Request, Response>
         CpuTime cused = getCpuTimeDiff(c1, c2);
         VmCpuStat vused = getVmCpuStatDiff(v1, v2);
         long vuptime = getUpTime(v2);
-        String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
+        //String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
+        String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? runCommand(request.getName()): "";
         //Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
                                   vused.cpunice, vused.cpukrn, vused.cpuidle, vused.cpuiowait, vused.cpuirq, 
@@ -370,6 +371,24 @@ public class lambda_test implements RequestHandler<Request, Response>
         System.out.println("calcs=" + req.getCalcs() + " sleep=" + req.getSleep() + " loops=" + req.getLoops() + " getfile=" + req.getName());
         Response resp = lt.handleRequest(req, c);
         System.out.println(resp.toString());
+    }
+    
+    public String runCommand(String sCommand)
+    {
+        String output = "";
+        try
+        {
+            Process p = Runtime.getRuntime().exec(sCommand);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while (br.ready())
+                output += br.readLine();
+            p.destroy();
+            return output;
+        }
+        catch (IOException ioe)
+        {
+            return "command " + sCommand + " failed.";
+        }
     }
 
     public int getPID() 
