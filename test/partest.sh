@@ -23,7 +23,7 @@ callservice() {
   do
     #CALCS - uncomment JSON line for desired number of calcs
     #(0) - no calcs - 0
-    json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
+    #json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":0,\"loops\"":0}
 
     #(1) - very light calcs - 2,000
     #json={"\"name\"":"\"\",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
@@ -32,7 +32,7 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
     #(3) - medium calcs 200,000 
-    #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
     #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}

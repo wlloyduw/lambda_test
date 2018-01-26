@@ -1,0 +1,98 @@
+#/sbin directory on Lambda
+total 5556
+-rwxr-xr-x 1 root root  14208 Apr 26  2017 addpart
+-rwxr-xr-x 1 root root  36184 Apr 26  2017 agetty
+-rwxr-xr-x 1 root root  56352 Jul  7  2012 arp
+-rwxr-xr-x 1 root root  22584 May 17  2016 arping
+-rwxr-xr-x 1 root root  18376 Apr 26  2017 blkdiscard
+-rwxr-xr-x 1 root root  69280 Apr 26  2017 blkid
+-rwxr-xr-x 1 root root  28168 Apr 26  2017 blockdev
+-rwxr-xr-x 1 root root  64784 Mar  8  2016 bridge
+-rwxr-xr-x 1 root root  63528 Apr 26  2017 cfdisk
+-rwxr-xr-x 1 root root   5616 Feb 18  2016 change_console
+-rwxr-xr-x 1 root root  20472 Apr 26  2017 chcpu
+-rwxr-xr-x 1 root root  29264 Mar 17  2015 chkconfiglrwxrwxrwx 1 root root      7 Jan 19 18:59 clock -> hwclock
+-rwxr-xr-x 1 root root   4928 Oct 12  2016 consoletype
+-rwxr-xr-x 1 root root   7808 Apr 26  2017 ctrlaltdel
+-rwxr-xr-x 1 root root  14064 Apr 26  2017 delpartlrwxrwxrwx 1 root root     13 Jan 19 18:59 depmod -> /usr/bin/kmod
+-rwxr-xr-x 1 root root  12141 Aug  4  2016 dracut
+-rwxr-xr-x 1 root root  12104 Jul  7  2012 ether-wake
+-rwxr-xr-x 1 root root 261904 Sep  1  2015 ethtool
+-rwxr-xr-x 1 root root  14368 Aug 26  2015 faillock
+-rwxr-xr-x 1 root root 174792 Apr 26  2017 fdisk
+-rwxr-xr-x 1 root root   7840 Apr 26  2017 findfs
+-rwxr-xr-x 1 root root  32144 Apr 26  2017 fsck
+-rwxr-xr-x 1 root root  15216 Apr 26  2017 fsck.cramfs
+-rwxr-xr-x 1 root root   9312 Apr 26  2017 fsfreeze
+-rwxr-xr-x 1 root root   5504 Oct 12  2016 fstab-decode
+-rwxr-xr-x 1 root root  31944 Apr 26  2017 fstrim
+-rwxr-xr-x 1 root root  32336 Sep 10  2014 fuser
+-rwxr-xr-x 1 root root   5104 Oct 12  2016 genhostid
+-rwxr-xr-x 1 root root   8216 Oct 12  2016 getkey
+-rwxr-xr-x 1 root root  45912 Dec  2  2013 grubbylrwxrwxrwx 1 root root      6 Jan 19 18:59 halt -> reboot
+-rwxr-xr-x 1 root root  41120 Apr 26  2017 hwclock
+-rwxr-xr-x 1 root root   3056 Mar  8  2016 ifcfg
+-rwxr-xr-x 1 root root  69440 Jul  7  2012 ifconfig
+-rwxr-xr-x 1 root root   1510 Apr  9  2015 ifdown
+-rwxr-xr-x 1 root root  19672 May 17  2016 ifenslave
+-rwxr-xr-x 1 root root   4689 Apr  9  2015 ifup
+-rwxr-xr-x 1 root root 150360 Mar 21  2014 init
+-rwxr-xr-x 1 root root 138792 Mar 21  2014 initctllrwxrwxrwx 1 root root     13 Jan 19 18:59 insmod -> /usr/bin/kmod
+-rwxr-xr-x 1 root root 108288 Sep 15  2014 install-info
+-rwxr-xr-x 1 root root   2670 Dec  2  2013 installkernel
+-rwxr-xr-x 1 root root 375328 Mar  8  2016 iplrwxrwxrwx 1 root root     13 Jan 19 18:59 ip6tables -> xtables-multilrwxrwxrwx 1 root root     13 Jan 19 18:59 ip6tables-restore -> xtables-multilrwxrwxrwx 1 root root     13 Jan 19 18:59 ip6tables-save -> xtables-multi
+-rwxr-xr-x 1 root root  15344 Jul  7  2012 ipmaddrlrwxrwxrwx 1 root root     13 Jan 19 18:59 iptables -> xtables-multilrwxrwxrwx 1 root root     13 Jan 19 18:59 iptables-restore -> xtables-multilrwxrwxrwx 1 root root     13 Jan 19 18:59 iptables-save -> xtables-multi
+-rwxr-xr-x 1 root root  19264 Jul  7  2012 iptunnel
+-rwxr-xr-x 1 root root  16680 Feb 18  2016 killall5
+-rwxr-xr-x 1 root root 950856 Aug 30 22:49 ldconfig
+-rwxr-xr-x 1 root root  73640 Apr 26  2017 losetup
+-rwxr-xr-x 1 root root   4023 Aug  4  2016 lsinitrdlrwxrwxrwx 1 root root     13 Jan 19 18:59 lsmod -> /usr/bin/kmod
+-rwxr-xr-x 1 root root  18032 Jul  7  2012 mii-diag
+-rwxr-xr-x 1 root root  13920 Jul  7  2012 mii-tool
+-rwxr-xr-x 1 root root  15256 Jan  5  2012 mingetty
+-rwxr-xr-x 1 root root   9496 Apr 26  2017 mkfs
+-rwxr-xr-x 1 root root  29112 Apr 26  2017 mkfs.cramfs
+-rwxr-xr-x 1 root root  18504 Aug 26  2015 mkhomedir_helper
+-rwxr-xr-x 1 root root   3412 Aug  4  2016 mkinitrd
+-rwxr-xr-x 1 root root  60976 Apr 26  2017 mkswaplrwxrwxrwx 1 root root     13 Jan 19 18:59 modinfo -> /usr/bin/kmodlrwxrwxrwx 1 root root     13 Jan 19 18:59 modprobe -> /usr/bin/kmod
+-rwxr-xr-x 1 root root  11464 Jul  7  2012 nameif
+-rwxr-xr-x 1 root root  14436 Dec  2  2013 new-kernel-pkg
+-rwxr-xr-x 1 root root   4864 Apr 26  2017 nologin
+-rwxr-xr-x 1 root root  38992 Aug 26  2015 pam_console_apply
+-rwxr-xr-x 1 root root  14384 Aug 26  2015 pam_tally2
+-rwxr-xr-x 1 root root  77824 Apr 26  2017 partxlrwxrwxrwx 1 root root      8 Jan 19 18:59 pidof -> killall5
+-rwxr-xr-x 1 root root   7496 Apr 26  2017 pivot_root
+-rwxr-xr-x 1 root root   6944 Jul  7  2012 plipconfiglrwxrwxrwx 1 root root      6 Jan 19 18:59 poweroff -> reboot
+-rwxr-xr-x 1 root root  21680 Oct 12  2016 ppp-watch
+-rwxr-xr-x 1 root root  14752 Aug 26  2015 pwhistory_helper
+-rwxr-xr-x 1 root root  26712 May 17  2016 rdisc
+-rwxr-xr-x 1 root root  14840 Mar 21  2014 rebootlrwxrwxrwx 1 root root      7 Jan 19 18:59 reload -> initctllrwxrwxrwx 1 root root      7 Jan 19 18:59 restart -> initctllrwxrwxrwx 1 root root     13 Jan 19 18:59 rmmod -> /usr/bin/kmod
+-rwxr-xr-x 1 root root  55248 Jul  7  2012 route
+-rwxr-xr-x 1 root root    173 Mar  8  2016 routef
+-rwxr-xr-x 1 root root   1262 Mar  8  2016 routel
+-rwxr-xr-x 1 root root  44160 Mar  8  2016 rtmon
+-rwxr-xr-x 1 root root     37 Mar  8  2016 rtpr
+-rwxr-xr-x 1 root root  14368 Mar 21  2014 runlevel
+-rwxr-xr-x 1 root root  28216 Apr 26  2017 runuser
+-rwxr-xr-x 1 root root   7616 Oct 12  2016 securetty
+-rwxr-xr-x 1 root root   1694 Oct 12  2016 service
+-rwxr-xr-x 1 root root    850 Oct 12  2016 setsysfont
+-rwxr-xr-x 1 root root  66536 Apr 26  2017 sfdisk
+-rwxr-xr-x 1 root root  60408 Mar 21  2014 shutdown
+-rwxr-xr-x 1 root root  34592 Jul  7  2012 slattach
+-rwxr-xr-x 1 root root 741592 Aug 30 22:49 slnlrwxrwxrwx 1 root root      7 Jan 19 18:59 start -> initctl
+-rwxr-xr-x 1 root root   1904 Mar 19  2014 start_udevlrwxrwxrwx 1 root root      7 Jan 19 18:59 status -> initctllrwxrwxrwx 1 root root      7 Jan 19 18:59 stop -> initctl
+-rwxr-xr-x 1 root root  12592 Feb 18  2016 sulogin
+-rwxr-xr-x 1 root root     67 Oct 12  2016 sushell
+-rwxr-xr-x 1 root root  13272 Apr 26  2017 swapoff
+-rwxr-xr-x 1 root root  45512 Apr 26  2017 swapon
+-rwxr-xr-x 1 root root  11096 Apr 26  2017 switch_root
+-rwxr-xr-x 1 root root  12760 Mar 17  2015 sysctl
+-rwxr-xr-x 1 root root 335912 Mar  8  2016 tc
+-rwxr-xr-x 1 root root  51544 Mar 21  2014 telinit
+-rwxr-xr-x 1 root root 137248 Mar 19  2014 udevadm
+-rwxr-xr-x 1 root root 141400 Mar 19  2014 udevd
+-rwxr-xr-x 1 root root     31 Mar 19  2014 udevsettle
+-rwx------ 1 root root  34856 Aug 26  2015 unix_updatelrwxrwxrwx 1 root root     22 Jan 19 18:59 weak-modules -> /usr/sbin/weak-modules
+-rwxr-xr-x 1 root root  23680 Apr 26  2017 wipefs
+-rwxr-xr-x 1 root root  84976 Sep 27  2013 xtables-multi
