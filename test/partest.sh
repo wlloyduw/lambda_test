@@ -5,6 +5,7 @@
 #
 totalruns=$1
 threads=$2
+vmreport=$3
 containers=()
 cuses=()
 ctimes=()
@@ -29,13 +30,13 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":100,\"sleep\"":0,\"loops\"":20}
 
     #(2) - light calcs - 20,000
-    json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
     #(3) - medium calcs 200,000 
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
-    #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
@@ -190,6 +191,10 @@ currtime=$(date +%s)
 echo "Current time of test=$currtime"
 echo "host,host_up_time,uses,containers,totaltime,avgruntime_host,uses_minus_avguses_sq"
 total=0
+if [[ ! -z $vmreport && $vmreport -eq 1 ]]
+then
+  rm .uniqvm 
+fi
 for ((i=0;i < ${#hosts[@]};i++)) {
   avg=`echo ${htimes[$i]} / ${huses[$i]} | bc -l`
   stdiff=`echo ${huses[$i]} - $runsperhost | bc -l` 
@@ -204,6 +209,17 @@ for ((i=0;i < ${#hosts[@]};i++)) {
       fi
   } 
   echo "${hosts[$i]},$uptime,${huses[$i]},$ccount,${htimes[$i]},$avg,$stdiffsq"
+  if [[ ! -z $vmreport && $vmreport -eq 1 ]] 
+  then
+    echo "${hosts[$i]}" >> .uniqvm 
+  fi
+  if [[ ! -z $vmreport && $vmreport -eq 2 ]]
+  then
+    echo "compare vms - check for recycling"
+    # read the file and compare current VMs to old VMs in .uniqvm
+    # increment a counter every time we find a recycled VM
+    # to calculate newhosts, hosts - recycledhosts
+  fi
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
 #echo "hosts,avgruntime,runs_per_host,stdev"

@@ -1,0 +1,8 @@
+#route -n on AWS Lambda
+route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         169.254.76.14   0.0.0.0         UG    0      0        0 vinternal_7169.254.76.0
+0.0.0.0         255.255.254.0                   U     0      0        0 vinternal_7169.254.76.14
+0.0.0.0         255.255.255.255                 UH    0      0        0 vinternal_7169.254.79.2
+0.0.0.0         255.255.255.255                 UH    0      0        0 vtarget_4  

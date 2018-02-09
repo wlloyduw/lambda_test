@@ -4,8 +4,10 @@
 #json={"\"name\"":"\"uname\u0020-a\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"echo\u0020hello\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"whoami\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+json={"\"name\"":"\"\/sbin\/route\u0020-n\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"ls\u0020-l\u0020\/sbin\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
-json={"\"name\"":"\"\/sbin\/ifconfig\u0020-a\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":200}
+#json={"\"name\"":"\"\/sbin\/ifconfig\u0020-a\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":200}
+#json={"\"name\"":"\"\/sbin\/ifconfig\u0020-a\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":200}
 #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 echo $json
 
