@@ -24,7 +24,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Random;
 import java.util.UUID;
 /**
- *
+ * uwt.lambda_test::handleRequest
  * @author wlloyd
  */
 public class lambda_test implements RequestHandler<Request, Response>
@@ -41,6 +41,8 @@ public class lambda_test implements RequestHandler<Request, Response>
         logger.log("Request for file=" + request.getName());
         File f = new File("/tmp/container-id");
         Path p = Paths.get("/tmp/container-id");
+        
+        
         
         if (f.exists()) 
         {
@@ -80,7 +82,7 @@ public class lambda_test implements RequestHandler<Request, Response>
             catch (InterruptedException ie)
             {
                 System.out.println("Sleep was interrupted...");
-            }
+            }  
         }
         CpuTime c2 = getCpuUtilization();
         VmCpuStat v2 = getVmCpuStat();
@@ -88,12 +90,14 @@ public class lambda_test implements RequestHandler<Request, Response>
         VmCpuStat vused = getVmCpuStatDiff(v1, v2);
         long vuptime = getUpTime(v2);
         //String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? getFileAsString(request.getName()): "";
-        String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? runCommand(request.getName()): "";
+        String fileout = ((request.getName() != null) && (request.getName().length() > 0)) ? runCommand(request.getName(),context): "";
         //Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime);
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
                                   vused.cpunice, vused.cpukrn, vused.cpuidle, vused.cpuiowait, vused.cpuirq, 
                                   vused.cpusirq, vused.cpusteal, vuptime, newcontainer);
         r.setPid(getPID());
+        
+        
         return r;
     }
     
@@ -373,21 +377,44 @@ public class lambda_test implements RequestHandler<Request, Response>
         System.out.println(resp.toString());
     }
     
-    public String runCommand(String sCommand)
+    public String runCommand(String sCommand, Context context)
     {
-        String output = "";
+        StringBuffer sbOutput = new StringBuffer();
         try
         {
+            sbOutput.append("COMMAND:");
+            sbOutput.append(sCommand);
             Process p = Runtime.getRuntime().exec(sCommand);
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            sbOutput.append("  OUTPUT:");
             while (br.ready())
-                output += br.readLine();
-            p.destroy();
-            return output;
+                sbOutput.append(br.readLine());
+            sbOutput.append("  ERROR:");
+            br.close();
+            br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            while (br.ready())
+                sbOutput.append(br.readLine());
+            br.close();
+            p.getOutputStream().close();
+            p.getErrorStream().close();
+            p.getInputStream().close();
+            //p.destroy();
+            //p.destroyForcibly();
+            //p.destroyForcibly();
+            //p.destroyForcibly();
+            p.waitFor();
+            sbOutput.append("  IS-ALIVE:" + p.isAlive());
+            sbOutput.append("  EXIT-VAL:" + p.exitValue());
+            sbOutput.append("  TIME-LEFT:" + context.getRemainingTimeInMillis());
+            return sbOutput.toString();
         }
         catch (IOException ioe)
         {
             return "command " + sCommand + " failed.";
+        }
+        catch (InterruptedException ie)
+        {
+            return "process interrupted running " + sCommand + " ...";
         }
     }
 

@@ -6,10 +6,15 @@
 totalruns=$1
 threads=$2
 vmreport=$3
+contreport=$4
 containers=()
 cuses=()
 ctimes=()
 
+#########################################################################################################################################################
+#  callservice method - uses separate threads to call AWS Lambda in parallel
+#  each thread captures results of one service request, and outputs CSV data...
+#########################################################################################################################################################
 callservice() {
   totalruns=$1
   threadid=$2
@@ -88,7 +93,6 @@ callservice() {
     vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
     newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
     
-    
     time2=( $(($(date +%s%N)/1000000)) )
     elapsedtime=`expr $time2 - $time1`
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
@@ -103,6 +107,9 @@ callservice() {
 }
 export -f callservice
 
+#########################################################################################################################################################
+#  The START of the Script
+#########################################################################################################################################################
 runsperthread=`echo $totalruns/$threads | bc -l`
 runsperthread=${runsperthread%.*}
 date
@@ -111,11 +118,24 @@ for (( i=1 ; i <= $threads ; i ++))
 do
   arpt+=($runsperthread)
 done
+#########################################################################################################################################################
+# Launch threads to call AWS Lambda in parallel
+#########################################################################################################################################################
 parallel --no-notice -j $threads -k callservice {1} {#} ::: "${arpt[@]}"
 #exit
 newconts=0
+recycont=0
+recyvms=0
 
-# determine unique number of containers used or created
+#########################################################################################################################################################
+# Begin post-processing and generation of CSV output sections
+#########################################################################################################################################################
+
+
+#########################################################################################################################################################
+# Generate CSV output - group by container
+# Reports unique number of containers used or created
+#########################################################################################################################################################
 filename=".uniqcont"
 while read -r line
 do
@@ -134,14 +154,22 @@ do
             ctimes[$i]=`expr ${ctimes[$i]} + $time`
             found=1
         fi
+
+      ##
+      ## Process the vmreport flag, to generate or compare against the .origcont file
+      ##
+      ## if state = 1 initialize file
+
+      ## if state = 2 compare against file to obtain total count of recycled containers used
     }
+
+    ## so this is where we need to process the 
     if [ $found != 1 ]; then
         containers+=($uuid)
         chosts+=($host)
         cuses+=(1)
         ctimes+=($time)
     fi
-
 
     hfound=0
     for ((i=0;i < ${#hosts[@]};i++)) {
@@ -183,6 +211,13 @@ for ((i=0;i < ${#containers[@]};i++)) {
   echo "${containers[$i]},${chosts[$i]},${cuses[$i]},${ctimes[$i]},$avg,$stdiffsq"
   #echo "${containers[$i]},${cuses[$i]},$avg"
 }
+
+
+#########################################################################################################################################################
+# Generate CSV output - group by VM host
+# hosts[] is the array of VM ids - where the VM id is the boot time in seconds since epoch (Jan 1 1970)
+#########################################################################################################################################################
+
 stdev=`echo $total / ${#containers[@]} | bc -l`
 #echo "containers,avgruntime,runs_per_container,stdev"
 #echo "${#containers[@]},$avgtime,$runspercont,$stdev"
@@ -193,7 +228,7 @@ echo "host,host_up_time,uses,containers,totaltime,avgruntime_host,uses_minus_avg
 total=0
 if [[ ! -z $vmreport && $vmreport -eq 1 ]]
 then
-  rm .uniqvm 
+  rm .origvm 
 fi
 for ((i=0;i < ${#hosts[@]};i++)) {
   avg=`echo ${htimes[$i]} / ${huses[$i]} | bc -l`
@@ -209,37 +244,43 @@ for ((i=0;i < ${#hosts[@]};i++)) {
       fi
   } 
   echo "${hosts[$i]},$uptime,${huses[$i]},$ccount,${htimes[$i]},$avg,$stdiffsq"
+
+  ## 
+  ##  Generate .origvm file to support determing infrastructure recycling stats
+  ##
   if [[ ! -z $vmreport && $vmreport -eq 1 ]] 
   then
-    echo "${hosts[$i]}" >> .uniqvm 
+    echo "${hosts[$i]}" >> .origvm 
   fi
   if [[ ! -z $vmreport && $vmreport -eq 2 ]]
   then
-    echo "compare vms - check for recycling"
-    # read the file and compare current VMs to old VMs in .uniqvm
+    ##echo "compare vms - check for recycling"
+    # read the file and compare current VMs to old VMs in .origvm
     # increment a counter every time we find a recycled VM
     # to calculate newhosts, hosts - recycledhosts
+    filename=".origvm"
+    while read -r line
+    do
+      ##echo "compare '${hosts[$i]}' == '${line}'"
+      if [ ${hosts[$i]} == ${line} ]
+      then
+          (( recyvms ++ ))
+          break;
+      fi
+    done < "$filename"
   fi
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
-#echo "hosts,avgruntime,runs_per_host,stdev"
-#echo "${#hosts[@]},$avgtime,$runsperhost,$stdev"
-echo "containers,newcontainers,hosts,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
-echo "${#containers[@]},$newconts,${#hosts[@]},$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
 
+#########################################################################################################################################################
+# Generate CSV output - report summary, final data
+#########################################################################################################################################################
+#
+# 
+#
+echo "containers,newcontainers,recycont,hosts,recyvms,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
+echo "${#containers[@]},$newconts,$recycont,${#hosts[@]},$recyvms,$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
 
-
-#echo "Standard deviation (runs per container)=$stdev"
-#echo "lower is better"
-
-# determine unique number of hosts used
-#filename=".uniqhost"
-#while read -r line
-#do
-#    vm=`echo $line | cut -d',' -f 1`
-#    uuid=`echo $line | cut -d',' -f 1`
-#    time=`echo $line | cut -d',' -f 1`
-#done < "$filename"
 
 
 
