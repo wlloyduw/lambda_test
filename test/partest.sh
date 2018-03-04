@@ -230,7 +230,7 @@ if [[ ! -z $vmreport && $vmreport -eq 1 ]]
 then
   rm .origvm 
 fi
-if [[ ! -z $contreport && $contreport -eq 1]]
+if [[ ! -z $contreport && $contreport -eq 1 ]]
 then
   rm .origcont
 fi
