@@ -159,8 +159,29 @@ do
       ## Process the vmreport flag, to generate or compare against the .origcont file
       ##
       ## if state = 1 initialize file
-
+      if [[ ! -z $contreport && $contreport -eq 1 ]]
+      then
+        echo "${containers[$i]}" >> .origcont
+      fi
+  
       ## if state = 2 compare against file to obtain total count of recycled containers used
+      if [[ ! -z $contreport && $contreport -eq 2 ]]
+      then
+        ##echo "compare containers - check for recycling"
+        # read the file and compare current containers to old containers in .origcont
+        # increment a counter every time we find a recycled container
+        # to calculate new containers, containers - recycled containers
+        filename=".origcont"
+        while read -r line
+        do
+          ##echo "compare '${containers[$i]}' == '${line}'"
+          if [ ${containers[$i]} == ${line} ]
+          then
+              (( recycont ++ ))
+              break;
+          fi
+        done < "$filename"
+      fi
     }
 
     ## so this is where we need to process the 
@@ -257,11 +278,6 @@ for ((i=0;i < ${#hosts[@]};i++)) {
     echo "${hosts[$i]}" >> .origvm 
   fi
   
-  if [[ ! -z $contreport && $contreport -eq 1 ]]
-  then
-    echo "${containers[$i]}" >> .origcont
-  fi
-  
   
   if [[ ! -z $vmreport && $vmreport -eq 2 ]]
   then
@@ -276,31 +292,15 @@ for ((i=0;i < ${#hosts[@]};i++)) {
       if [ ${hosts[$i]} == ${line} ]
       then
           (( recyvms ++ ))
-          break;
+          #break;
       fi
     done < "$filename"
   fi
 
-  if [[ ! -z $contreport && $contreport -eq 2 ]]
-  then
-    ##echo "compare containers - check for recycling"
-    # read the file and compare current containers to old containers in .origcont
-    # increment a counter every time we find a recycled container
-    # to calculate new containers, containers - recycled containers
-    filename=".origcont"
-    while read -r line
-    do
-      ##echo "compare '${containers[$i]}' == '${line}'"
-      if [ ${containers[$i]} == ${line} ]
-      then
-          (( recycont ++ ))
-          break;
-      fi
-    done < "$filename"
-  fi
+  
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
-stconthost=`echo $total / ${#containers[@]} | bc -l`
+#stconthost=`echo $total / ${#containers[@]} | bc -l`
 
 #########################################################################################################################################################
 # Generate CSV output - report summary, final data
@@ -308,8 +308,8 @@ stconthost=`echo $total / ${#containers[@]} | bc -l`
 #
 # 
 #
-echo "containers,newcontainers,recycont,hosts,recyvms,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev,runs_per_container_stdev"
-echo "${#containers[@]},$newconts,$recycont,${#hosts[@]},$recyvms,$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost,$stconthost"
+echo "containers,newcontainers,recycont,hosts,recyvms,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
+echo "${#containers[@]},$newconts,$recycont,${#hosts[@]},$recyvms,$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
 
 
 
