@@ -37,7 +37,7 @@ callservice() {
     #(2) - light calcs - 20,000
     #json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
-    #(3) - medium calcs 200,000 
+    #(3) - medium calcs 200,000
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
@@ -59,15 +59,15 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":100}
 
     time1=( $(($(date +%s%N)/1000000)) )
-    #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
+    #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2`
     ####output=`curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2/test 2>/dev/null`
     ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
     output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://b3euo2n6s7.execute-api.us-east-1.amazonaws.com/test 2>/dev/null`
     ########################output=`curl -H "Content-Type: application/json" -X POST -d  $json https://i1dc63pzgh.execute-api.us-east-1.amazonaws.com/test5/ 2>/dev/null`
-    #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
+    #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2`
 
-    # parsing when /proc/cpuinfo is not requested  
+    # parsing when /proc/cpuinfo is not requested
     #uuid=`echo $output | cut -d':' -f 3 | cut -d'"' -f 2`
     #cpuusr=`echo $output | cut -d':' -f 4 | cut -d',' -f 1`
     #cpukrn=`echo $output | cut -d':' -f 5 | cut -d',' -f 1`
@@ -81,7 +81,7 @@ callservice() {
     #pid=`echo $output | cut -d',' -f 5 | cut -d':' -f 2 | cut -d'"' -f 2`
     #cpusteal=`echo $output | cut -d'"' -f 4 | cut -d' ' -f 9`
     #cputype="unknwn"
-	
+
     # parsing when /proc/cpuinfo is requested
     uuid=`echo $output | cut -d',' -f 2 | cut -d':' -f 2 | cut -d'"' -f 2`
     cpuusr=`echo $output | cut -d',' -f 3 | cut -d':' -f 2`
@@ -92,7 +92,7 @@ callservice() {
     cpusteal=`echo $output | cut -d',' -f 13 | cut -d':' -f 2`
     vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
     newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
-    
+
     time2=( $(($(date +%s%N)/1000000)) )
     elapsedtime=`expr $time2 - $time1`
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
@@ -163,7 +163,7 @@ do
       ## if state = 2 compare against file to obtain total count of recycled containers used
     }
 
-    ## so this is where we need to process the 
+    ## so this is where we need to process the
     if [ $found != 1 ]; then
         containers+=($uuid)
         chosts+=($host)
@@ -204,8 +204,8 @@ echo "uuid,host,uses,totaltime,avgruntime_cont,uses_minus_avguses_sq"
 total=0
 for ((i=0;i < ${#containers[@]};i++)) {
   avg=`echo ${ctimes[$i]} / ${cuses[$i]} | bc -l`
-  stdiff=`echo ${cuses[$i]} - $runspercont | bc -l` 
-  stdiffsq=`echo "$stdiff * $stdiff" | bc -l` 
+  stdiff=`echo ${cuses[$i]} - $runspercont | bc -l`
+  stdiffsq=`echo "$stdiff * $stdiff" | bc -l`
   total=`echo $total + $stdiffsq | bc -l`
   #echo "$total + $stdiffsq"
   echo "${containers[$i]},${chosts[$i]},${cuses[$i]},${ctimes[$i]},$avg,$stdiffsq"
@@ -228,12 +228,12 @@ echo "host,host_up_time,uses,containers,totaltime,avgruntime_host,uses_minus_avg
 total=0
 if [[ ! -z $vmreport && $vmreport -eq 1 ]]
 then
-  rm .origvm 
+  rm .origvm
 fi
 for ((i=0;i < ${#hosts[@]};i++)) {
   avg=`echo ${htimes[$i]} / ${huses[$i]} | bc -l`
-  stdiff=`echo ${huses[$i]} - $runsperhost | bc -l` 
-  stdiffsq=`echo "$stdiff * $stdiff" | bc -l` 
+  stdiff=`echo ${huses[$i]} - $runsperhost | bc -l`
+  stdiffsq=`echo "$stdiff * $stdiff" | bc -l`
   total=`echo $total + $stdiffsq | bc -l`
   ccount=0
   uptime=`echo $currtime - ${hosts[$i]} | bc -l`
@@ -242,15 +242,15 @@ for ((i=0;i < ${#hosts[@]};i++)) {
       then
           (( ccount ++ ))
       fi
-  } 
+  }
   echo "${hosts[$i]},$uptime,${huses[$i]},$ccount,${htimes[$i]},$avg,$stdiffsq"
 
-  ## 
+  ##
   ##  Generate .origvm file to support determing infrastructure recycling stats
   ##
-  if [[ ! -z $vmreport && $vmreport -eq 1 ]] 
+  if [[ ! -z $vmreport && $vmreport -eq 1 ]]
   then
-    echo "${hosts[$i]}" >> .origvm 
+    echo "${hosts[$i]}" >> .origvm
   fi
   if [[ ! -z $vmreport && $vmreport -eq 2 ]]
   then
@@ -276,14 +276,7 @@ stdevhost=`echo $total / ${#hosts[@]} | bc -l`
 # Generate CSV output - report summary, final data
 #########################################################################################################################################################
 #
-# 
+#
 #
 echo "containers,newcontainers,recycont,hosts,recyvms,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
 echo "${#containers[@]},$newconts,$recycont,${#hosts[@]},$recyvms,$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
-
-
-
-
-
-
-
