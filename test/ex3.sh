@@ -1,6 +1,6 @@
 echo "[ex3.sh] Calling repeattest with api gateway url = " $1
-./partest.sh 100 100 2 2 | tail -n 1 >> .myruns
-sleep 10
+#./partest.sh 100 100 2 2 | tail -n 1 >> .myruns
+#sleep 10
 
 ./repeattest.sh 10 $1
 echo "10 second sleep"
