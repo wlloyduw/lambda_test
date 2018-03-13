@@ -38,10 +38,10 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
     #(3) - medium calcs 200,000 
-    #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
-    json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
@@ -62,7 +62,7 @@ callservice() {
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
     ####output=`curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2/test 2>/dev/null`
     ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
-    output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
+    output=`curl -H "Content-Type: application/json" -X POST -d  $json $apigateway 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://b3euo2n6s7.execute-api.us-east-1.amazonaws.com/test 2>/dev/null`
     ########################output=`curl -H "Content-Type: application/json" -X POST -d  $json https://i1dc63pzgh.execute-api.us-east-1.amazonaws.com/test5/ 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
@@ -136,6 +136,11 @@ recyvms=0
 # Generate CSV output - group by container
 # Reports unique number of containers used or created
 #########################################################################################################################################################
+if [[ ! -z $contreport && $contreport -eq 1 ]]
+    then
+      rm -f .origcont
+fi
+
 filename=".uniqcont"
 while read -r line
 do
@@ -148,6 +153,20 @@ do
     # if uuid is already in array
     found=0
     (( newconts += isnewcont))
+
+
+    ##
+    ## Process the contreport flag, to generate or compare against the .origcont file
+    ##
+    ## if state = 1 initialize file
+     # if [[ ! -z $contreport && $contreport -eq 1 ]]
+     # then
+      #  echo "$uuid" >> .origcont
+     # fi
+
+
+
+
     for ((i=0;i < ${#containers[@]};i++)) {
         if [ "${containers[$i]}" == "${uuid}" ]; then
             (( cuses[$i]++ ))
@@ -155,33 +174,7 @@ do
             found=1
         fi
 
-      ##
-      ## Process the vmreport flag, to generate or compare against the .origcont file
-      ##
-      ## if state = 1 initialize file
-      if [[ ! -z $contreport && $contreport -eq 1 ]]
-      then
-        echo "${containers[$i]}" >> .origcont
-      fi
-  
-      ## if state = 2 compare against file to obtain total count of recycled containers used
-      if [[ ! -z $contreport && $contreport -eq 2 ]]
-      then
-        ##echo "compare containers - check for recycling"
-        # read the file and compare current containers to old containers in .origcont
-        # increment a counter every time we find a recycled container
-        # to calculate new containers, containers - recycled containers
-        filename=".origcont"
-        while read -r line
-        do
-          ##echo "compare '${containers[$i]}' == '${line}'"
-          if [ ${containers[$i]} == ${line} ]
-          then
-              (( recycont ++ ))
-              break;
-          fi
-        done < "$filename"
-      fi
+      
     }
 
     ## so this is where we need to process the 
@@ -214,6 +207,40 @@ do
     #  containers+=($uuid)
     #fi
 done < "$filename"
+
+echo "ARRAY SIZE EQUAL ${#containers[@]} "
+if [[ ! -z $contreport && $contreport -eq 1 ]]
+  then
+    for ((i=0;i < ${#containers[@]};i++)) {
+      echo "${containers[$i]}" >> .origcont
+    } 
+fi
+
+    ## if state = 2 compare against file to obtain total count of recycled containers used
+      if [[ ! -z $contreport && $contreport -eq 2 ]]
+      then
+        for ((i=0;i < ${#containers[@]};i++)) {
+      # read the file and compare current containers to old containers in .origcont
+      # increment a counter every time we find a recycled container
+      # to calculate newcontainer, containers - recycledcontainers
+       filename=".origcont"
+       while read -r line
+          do
+            if [ "${containers[$i]}" == "${line}" ]
+            then
+                (( recycont ++ ))
+                break;
+            fi
+          done < "$filename"
+       }
+      fi
+
+
+
+
+
+
+
 #echo "Containers=${#containers[@]}"
 runspercont=`echo $totalruns / ${#containers[@]} | bc -l`
 runsperhost=`echo $totalruns / ${#hosts[@]} | bc -l`
@@ -249,11 +276,7 @@ echo "host,host_up_time,uses,containers,totaltime,avgruntime_host,uses_minus_avg
 total=0
 if [[ ! -z $vmreport && $vmreport -eq 1 ]]
 then
-  rm .origvm 
-fi
-if [[ ! -z $contreport && $contreport -eq 1 ]]
-then
-  rm .origcont
+  rm -f .origvm 
 fi
 for ((i=0;i < ${#hosts[@]};i++)) {
   avg=`echo ${htimes[$i]} / ${huses[$i]} | bc -l`
@@ -277,8 +300,6 @@ for ((i=0;i < ${#hosts[@]};i++)) {
   then
     echo "${hosts[$i]}" >> .origvm 
   fi
-  
-  
   if [[ ! -z $vmreport && $vmreport -eq 2 ]]
   then
     ##echo "compare vms - check for recycling"
@@ -292,15 +313,12 @@ for ((i=0;i < ${#hosts[@]};i++)) {
       if [ ${hosts[$i]} == ${line} ]
       then
           (( recyvms ++ ))
-          #break;
+          break;
       fi
     done < "$filename"
   fi
-
-  
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
-#stconthost=`echo $total / ${#containers[@]} | bc -l`
 
 #########################################################################################################################################################
 # Generate CSV output - report summary, final data
