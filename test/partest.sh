@@ -56,9 +56,9 @@ callservice() {
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
     ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2/test 2>/dev/null`
     ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
-    output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
+    ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
-
+    output=`curl -H "Content-Type: application/json" -X POST -d  $json https://172.17.0.5`
     # parsing when /proc/cpuinfo is not requested  
     #uuid=`echo $output | cut -d':' -f 3 | cut -d'"' -f 2`
     #cpuusr=`echo $output | cut -d':' -f 4 | cut -d',' -f 1`
@@ -84,6 +84,9 @@ callservice() {
     cpusteal=`echo $output | cut -d',' -f 13 | cut -d':' -f 2`
     vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
     newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
+
+    # parsing when /proc/cpuinfo reach into the network
+
     
     
     time2=( $(($(date +%s%N)/1000000)) )

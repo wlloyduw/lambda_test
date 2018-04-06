@@ -1,8 +1,5 @@
-FROM ubuntu
-RUN apt-get update
-RUN apt-get install -y default-jre
-COPY lambda_test-1.0-SNAPSHOT.jar /
-COPY test.sh /
-ENTRYPOINT ["/test.sh"]
-CMD ["300"]
-#CMD ["/usr/bin/java","-cp","lambda_test-1.0-SNAPSHOT.jar","uwt.lambda_test","10000000","0","1",""]
+FROM openjdk:8
+RUN mkdir -p /Users/minhvu/Desktop/lambda_test
+COPY lambda_test.jar /Users/minhvu/Desktop/lambda_test
+WORKDIR /Users/minhvu/Desktop/lambda_test
+ENTRYPOINT ["java", "-jar", "lambda_test.jar"]

@@ -10,17 +10,18 @@ import com.amazonaws.services.lambda.runtime.CognitoIdentity;
 import com.amazonaws.services.lambda.runtime.Context; 
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 /**
@@ -31,6 +32,7 @@ public class lambda_test implements RequestHandler<Request, Response>
 {
     static String CONTAINER_ID = "/tmp/container-id";
     static Charset CHARSET = Charset.forName("US-ASCII");
+    static int receivingPort = 12345;
     
     public Response handleRequest(Request request, Context context) {
         int newcontainer = 0;
@@ -39,9 +41,9 @@ public class lambda_test implements RequestHandler<Request, Response>
         String uuid = "unset";
         LambdaLogger logger = context.getLogger();
         logger.log("Request for file=" + request.getName());
+
         File f = new File("/tmp/container-id");
         Path p = Paths.get("/tmp/container-id");
-        
         if (f.exists()) 
         {
             try (BufferedReader br = Files.newBufferedReader(p))
@@ -92,11 +94,92 @@ public class lambda_test implements RequestHandler<Request, Response>
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
                                   vused.cpunice, vused.cpukrn, vused.cpuidle, vused.cpuiowait, vused.cpuirq, 
                                   vused.cpusirq, vused.cpusteal, vuptime, newcontainer);
+
         r.setPid(getPID());
+
+        System.out.println("This is netstat: " + runCommand("/bin/netstat"));
+        System.out.println("This is route: " + runCommand("/sbin/route"));
+
+        String myIP = findingInternalIpAddress();
+        System.out.println("This is an IP: " + myIP);
+        try {
+            TCPServer server = new TCPServer(myIP);
+            server.listen();
+        } catch (Exception e) {
+            System.out.println("error in tcp server");
+            e.printStackTrace();
+        }
+
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            for (int i = 0; i <= 255; i++) {
+                                String target = myIP.substring(0, myIP.lastIndexOf(".")+1)+String.valueOf(i);
+                                Socket socket = new Socket(target, 8888);
+                                System.out.println("Finding the server: " + target);
+                                String input = "Hello from: " + myIP + "to: " + target;
+                                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                                out.println(input);
+                                out.flush();
+                            }
+                        } catch (IOException e) {
+                            System.out.println("Sending socket failed");
+                            System.out.println(e);
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                100
+        );
         return r;
     }
-    
-    
+
+    public String runCommand(String sCommand)
+    {
+        String output = "";
+        try
+        {
+            Process p = Runtime.getRuntime().exec(sCommand);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while (br.ready())
+                output += br.readLine();
+            p.destroy();
+            return output;
+        }
+        catch (IOException ioe)
+        {
+            return "command " + sCommand + " failed.";
+        }
+    }
+
+    private String findingInternalIpAddress() {
+        String myIP = "";
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+
+            // This should only focus on
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                if (networkInterface.isLoopback() || !networkInterface.isUp() || !networkInterface.getDisplayName().contains("vinternal")) {
+                    continue;
+                }
+                if (networkInterface.getDisplayName().contains("vinternal")) {
+                    Enumeration<InetAddress> a = networkInterface.getInetAddresses();
+                    while (a.hasMoreElements()) {
+                        InetAddress addr = a.nextElement();
+                        return addr.getHostAddress();
+                    }
+                }
+
+            }
+        } catch (IOException e) {
+            System.out.println("There is something");
+        }
+        return myIP;
+    }
     private void randomMath(int calcs)
     {
         Random rand = new Random();
@@ -357,7 +440,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         lambda_test lt = new lambda_test();
         
         Request req = new Request("hello fred");
-        
+
         int calcs = (args.length > 0 ? Integer.parseInt(args[0]) : 0);
         int sleep = (args.length > 1 ? Integer.parseInt(args[1]) : 0);
         int loops = (args.length > 2 ? Integer.parseInt(args[2]) : 0);
