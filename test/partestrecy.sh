@@ -21,10 +21,10 @@ callservice() {
   #host=10.0.0.124
   #port=8080
   onesecond=1000
-  filename="parurl1"
+  filename="parurl"
   while read -r line
   do
-    parurl1=$line
+    parurl=$line
   done < "$filename"
 
   if [ $threadid -eq 1 ]
@@ -68,7 +68,7 @@ callservice() {
     #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
     ####output=`curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2/test 2>/dev/null`
     ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
-    output=`curl -H "Content-Type: application/json" -X POST -d  $json $parurl1 2>/dev/null`
+    output=`curl -H "Content-Type: application/json" -X POST -d  $json $parurl 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://b3euo2n6s7.execute-api.us-east-1.amazonaws.com/test 2>/dev/null`
     ########################output=`curl -H "Content-Type: application/json" -X POST -d  $json https://i1dc63pzgh.execute-api.us-east-1.amazonaws.com/test5/ 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
