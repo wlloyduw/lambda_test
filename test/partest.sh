@@ -75,6 +75,9 @@ callservice() {
     ########################output=`curl -H "Content-Type: application/json" -X POST -d  $json https://i1dc63pzgh.execute-api.us-east-1.amazonaws.com/test5/ 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
 
+    # grab time
+    time2=( $(($(date +%s%N)/1000000)) )
+
     # parsing when /proc/cpuinfo is not requested  
     #uuid=`echo $output | cut -d':' -f 3 | cut -d'"' -f 2`
     #cpuusr=`echo $output | cut -d':' -f 4 | cut -d',' -f 1`
@@ -101,7 +104,6 @@ callservice() {
     vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
     newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
     
-    time2=( $(($(date +%s%N)/1000000)) )
     elapsedtime=`expr $time2 - $time1`
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
     sleeptimems=`echo $sleeptime/$onesecond | bc -l`
