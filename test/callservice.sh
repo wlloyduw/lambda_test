@@ -3,15 +3,23 @@
 #aws lambda invoke --invocation-type RequestResponse --function-name test --region us-east-1 --log-type Tail --payload '{"calcs":100000,"sleep":0,"loops":20}' out.txt
 
 
+#aws lambda invoke --invocation-type RequestResponse --function-name test --region us-east-1 --log-type Tail --payload '{"calcs":100000,"sleep":0,"loops":450}' out.txt
+#cat out.txt
+#echo
+#echo
+#echo
+#aws lambda invoke --invocation-type RequestResponse --function-name test --region us-east-1 --log-type Tail --payload '{"calcs":100000,"sleep":0,"loops":20}' out.txt
+#exit
+
 #json={"\"name\"":"\"uname\u0020-a\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"echo\u0020hello\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"whoami\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
-json={"\"name\"":"\"\/sbin\/route\u0020-n\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":50}
+json={"\"name\"":"\"\/sbin\/route\u0020-n\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"ls\u0020-l\u0020\/sbin\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"\/sbin\/ifconfig\u0020-a\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":200}
 #json={"\"name\"":"\"\/sbin\/ifconfig\u0020-a\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":200}
 #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
-echo $json
+#echo $json
 
 #call using curl 
 
@@ -20,6 +28,7 @@ echo $json
 curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 
 #curl -H "Content-Type: application/json" -X POST -d  $json https://2ampa6hww3.execute-api.us-east-1.amazonaws.com/test8/
 #curl -H "Content-Type: application/json" -X POST -d  $json https://8v257bm4qe.execute-api.us-east-1.amazonaws.com/test7/
+
 exit
 #curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2
 #curl -H "Content-Type: application/json" -X POST -d  $json https://os3m6ub7u1.execute-api.us-east-1.amazonaws.com/exp4; echo &

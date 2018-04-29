@@ -47,10 +47,10 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
-    #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
-    json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
     #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
@@ -73,6 +73,9 @@ callservice() {
     ########################output=`curl -H "Content-Type: application/json" -X POST -d  $json https://i1dc63pzgh.execute-api.us-east-1.amazonaws.com/test5/ 2>/dev/null`
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
 
+    # grab end time
+    time2=( $(($(date +%s%N)/1000000)) )
+
     # parsing when /proc/cpuinfo is not requested  
     #uuid=`echo $output | cut -d':' -f 3 | cut -d'"' -f 2`
     #cpuusr=`echo $output | cut -d':' -f 4 | cut -d',' -f 1`
@@ -89,17 +92,23 @@ callservice() {
     #cputype="unknwn"
 	
     # parsing when /proc/cpuinfo is requested
-    uuid=`echo $output | cut -d',' -f 2 | cut -d':' -f 2 | cut -d'"' -f 2`
-    cpuusr=`echo $output | cut -d',' -f 3 | cut -d':' -f 2`
-    cpukrn=`echo $output | cut -d',' -f 4 | cut -d':' -f 2 | cut -d'"' -f 2`
-    pid=`echo $output | cut -d',' -f 5 | cut -d':' -f 2 | cut -d'"' -f 2`
+    uuid=`echo $output | jq '.uuid'`
+    #uuid=`echo $output | cut -d',' -f 2 | cut -d':' -f 2 | cut -d'"' -f 2`
+    #cpuusr=`echo $output | cut -d',' -f 3 | cut -d':' -f 2`
+    cpuusr=`echo $output | jq '.cpuUsr'`  
+    #cpukrn=`echo $output | cut -d',' -f 4 | cut -d':' -f 2 | cut -d'"' -f 2`
+    cpukrn=`echo $output | jq '.cpuKrn'`
+    #pid=`echo $output | cut -d',' -f 5 | cut -d':' -f 2 | cut -d'"' -f 2`
+    pid=`echo $output | jq '.pid'`
     cputype="unknown"
     #cputype=`echo $output | cut -d',' -f 1 | cut -d':' -f 7 | cut -d'\' -f 1 | xargs`
-    cpusteal=`echo $output | cut -d',' -f 13 | cut -d':' -f 2`
-    vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
-    newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
+    #cpusteal=`echo $output | cut -d',' -f 13 | cut -d':' -f 2`
+    cpusteal=`echo $output | jq '.vmcpusteal'`
+    #vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
+    vuptime=`echo $output | jq '.vmuptime'`
+    #newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
+    newcont=`echo $output | jq '.newcontainer'`
     
-    time2=( $(($(date +%s%N)/1000000)) )
     elapsedtime=`expr $time2 - $time1`
     sleeptime=`echo $onesecond - $elapsedtime | bc -l`
     sleeptimems=`echo $sleeptime/$onesecond | bc -l`
