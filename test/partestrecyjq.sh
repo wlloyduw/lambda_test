@@ -1,7 +1,8 @@
 #!/bin/bash
 # script requires gnu parallel package, and the bash calculator
 #
-# apt install parallel bc
+# script requires packages:
+# apt install parallel bc jq
 #
 totalruns=$1
 threads=$2
@@ -76,37 +77,14 @@ callservice() {
     # grab end time
     time2=( $(($(date +%s%N)/1000000)) )
 
-    # parsing when /proc/cpuinfo is not requested  
-    #uuid=`echo $output | cut -d':' -f 3 | cut -d'"' -f 2`
-    #cpuusr=`echo $output | cut -d':' -f 4 | cut -d',' -f 1`
-    #cpukrn=`echo $output | cut -d':' -f 5 | cut -d',' -f 1`
-    #pid=`echo $output | cut -d':' -f 6 | cut -d',' -f 1`
-    #cputype="unknwn"
-
-    # parsing when /proc/stat is requested
-    #uuid=`echo $output | cut -d',' -f 2 | cut -d':' -f 2 | cut -d'"' -f 2`
-    #cpuusr=`echo $output | cut -d',' -f 3 | cut -d':' -f 2`
-    #cpukrn=`echo $output | cut -d',' -f 4 | cut -d':' -f 2 | cut -d'"' -f 2`
-    #pid=`echo $output | cut -d',' -f 5 | cut -d':' -f 2 | cut -d'"' -f 2`
-    #cpusteal=`echo $output | cut -d'"' -f 4 | cut -d' ' -f 9`
-    #cputype="unknwn"
-	
     # parsing when /proc/cpuinfo is requested
     uuid=`echo $output | jq '.uuid'`
-    #uuid=`echo $output | cut -d',' -f 2 | cut -d':' -f 2 | cut -d'"' -f 2`
-    #cpuusr=`echo $output | cut -d',' -f 3 | cut -d':' -f 2`
     cpuusr=`echo $output | jq '.cpuUsr'`  
-    #cpukrn=`echo $output | cut -d',' -f 4 | cut -d':' -f 2 | cut -d'"' -f 2`
     cpukrn=`echo $output | jq '.cpuKrn'`
-    #pid=`echo $output | cut -d',' -f 5 | cut -d':' -f 2 | cut -d'"' -f 2`
     pid=`echo $output | jq '.pid'`
     cputype="unknown"
-    #cputype=`echo $output | cut -d',' -f 1 | cut -d':' -f 7 | cut -d'\' -f 1 | xargs`
-    #cpusteal=`echo $output | cut -d',' -f 13 | cut -d':' -f 2`
     cpusteal=`echo $output | jq '.vmcpusteal'`
-    #vuptime=`echo $output | cut -d',' -f 14 | cut -d':' -f 2`
     vuptime=`echo $output | jq '.vmuptime'`
-    #newcont=`echo $output | cut -d',' -f 15 | cut -d':' -f 2`
     newcont=`echo $output | jq '.newcontainer'`
     
     elapsedtime=`expr $time2 - $time1`

@@ -42,8 +42,6 @@ public class lambda_test implements RequestHandler<Request, Response>
         File f = new File("/tmp/container-id");
         Path p = Paths.get("/tmp/container-id");
         
-        
-        
         if (f.exists()) 
         {
             try (BufferedReader br = Files.newBufferedReader(p))
