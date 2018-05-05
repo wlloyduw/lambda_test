@@ -48,13 +48,13 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
-    json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
-    #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
+    json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
 
     #(7) - many calcs low memory stress - 10,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
@@ -220,14 +220,18 @@ then
     # increment a counter every time we find a recycled container
     # to calculate newcontainer, containers - recycledcontainers
     filename=".origcont"
+    breakoutcont=0
     while read -r line
     do
       if [ "${containers[$i]}" == "${line}" ]
       then
           (( recycont ++ ))
+    	  breakoutcont=1
           break;
       fi
     done < "$filename"
+    # if breakoutcont==0 then:
+    # add container to newcont file if its not already there... (function call) 
   }
 fi
 
@@ -299,15 +303,19 @@ for ((i=0;i < ${#hosts[@]};i++)) {
     # increment a counter every time we find a recycled VM
     # to calculate newhosts, hosts - recycledhosts
     filename=".origvm"
+    breakoutvm=0
     while read -r line
     do
       ##echo "compare '${hosts[$i]}' == '${line}'"
       if [ ${hosts[$i]} == ${line} ]
       then
           (( recyvms ++ ))
+          breakoutvm=1
           break;
       fi
     done < "$filename"
+    # if breakoutvm==0 then:
+    # add vm to .newvm file if its not already there... (function call) 
   fi
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
@@ -320,7 +328,9 @@ stdevhost=`echo $total / ${#hosts[@]} | bc -l`
 #
 echo "containers,newcontainers,recycont,hosts,recyvms,avgruntime,runs_per_container,runs_per_cont_stdev,runs_per_host,runs_per_host_stdev"
 echo "${#containers[@]},$newconts,$recycont,${#hosts[@]},$recyvms,$avgtime,$runspercont,$stdev,$runsperhost,$stdevhost"
-
+# if recycont==0 && recyvm==0 then promote and delete:
+# .newcont --> .origcont
+# .newvm --> .origvm
 
 
 

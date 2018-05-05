@@ -1,1 +1,1 @@
-{"value":"","uuid":"f3a3efaa-463e-4d07-a106-48156590f0a6","cpuUsr":20,"cpuKrn":0,"pid":1,"vmcpuusr":19,"vmcpunice":0,"vmcpukrn":0,"vmcpuidle":592,"vmcpuiowait":0,"vmcpuirq":0,"vmcpusirq":0,"vmcpusteal":1,"vmuptime":1525140069,"newcontainer":0,"cuTime":0,"csTime":0}
+{"value":"","uuid":"44ee48a2-6d3b-41bb-a70b-4396e2353e51","cpuUsr":16,"cpuKrn":0,"pid":1,"vmcpuusr":13,"vmcpunice":0,"vmcpukrn":0,"vmcpuidle":241,"vmcpuiowait":0,"vmcpuirq":0,"vmcpusirq":0,"vmcpusteal":0,"vmuptime":1525307464,"newcontainer":0,"cuTime":0,"csTime":0}
