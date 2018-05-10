@@ -48,13 +48,13 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
-    #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
-    json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
+    #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
 
     #(7) - many calcs low memory stress - 10,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100,\"sleep\"":0,\"loops\"":100000}
@@ -63,16 +63,23 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":1000}
 
     #(9) - many calcs even higher memory stress - 10,000,000
-    #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":100}
+    #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":25}
 
     time1=( $(($(date +%s%N)/1000000)) )
-    #uuid=`curl -H "Content-Type: application/json" -X POST -d "{\"name\": \"Fred\"}" https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
-    ####output=`curl -H "Content-Type: application/json" -X POST -d  $json https://a9gseqxep9.execute-api.us-east-1.amazonaws.com/test2/test 2>/dev/null`
-    ###output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ctbiwxx3f3.execute-api.us-east-1.amazonaws.com/dev1 2>/dev/null`
-    output=`curl -H "Content-Type: application/json" -X POST -d  $json $parurl 2>/dev/null`
+
+    ####################################
+    # Uncomment for CURL invocation with $parurl variable
+    ####################################output=`curl -H "Content-Type: application/json" -X POST -d  $json $parurl 2>/dev/null`
+
+    ####################################
+    # AWS Lambda CLI
+    ####################################
+    output=`aws lambda invoke --invocation-type RequestResponse --function-name test --region us-east-1 --payload $json /dev/stdout | head -n 1 | head -c -2 ; echo`
+
+    ####################################
+    # CURL invocation with inline URL
+    ####################################
     #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://b3euo2n6s7.execute-api.us-east-1.amazonaws.com/test 2>/dev/null`
-    ########################output=`curl -H "Content-Type: application/json" -X POST -d  $json https://i1dc63pzgh.execute-api.us-east-1.amazonaws.com/test5/ 2>/dev/null`
-    #output=`curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 2>/dev/null | cut -d':' -f 3 | cut -d'"' -f 2` 
 
     # grab end time
     time2=( $(($(date +%s%N)/1000000)) )
