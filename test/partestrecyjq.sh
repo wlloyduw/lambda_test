@@ -48,10 +48,13 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":10000,\"sleep\"":0,\"loops\"":20}
 
     #(4) - somewhat heavy calcs - 500,000
-    json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
     #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+
+    #(5b) - heavy calcs - 2,500,000
+    json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":25}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
     #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
@@ -107,6 +110,18 @@ callservice() {
   done
 }
 export -f callservice
+
+####################################################################################################################### Writing File
+#################################################################################################################
+writingfile() {
+    if grep -Fxq $2 $1
+    then
+        break;
+    else
+        echo $2 >> $1
+    fi
+}
+export -f writingfile
 
 #########################################################################################################################################################
 #  The START of the Script
@@ -239,7 +254,11 @@ then
       fi
     done < "$filename"
     # if breakoutcont==0 then:
-    # add container to newcont file if its not already there... (function call) 
+    # add container to newcont file if its not already there... (function call)
+    if [ $breakoutcont == 0 ]
+    then
+        writingfile ".newcont" "${containers[$i]}"
+    fi
   }
 fi
 
@@ -324,6 +343,10 @@ for ((i=0;i < ${#hosts[@]};i++)) {
     done < "$filename"
     # if breakoutvm==0 then:
     # add vm to .newvm file if its not already there... (function call) 
+    if [ $breakoutvm == 0 ]
+    then
+        writingfile ".newvm" "${hosts[$i]}"
+    fi 
   fi
 }
 stdevhost=`echo $total / ${#hosts[@]} | bc -l`
@@ -339,6 +362,12 @@ echo "${#containers[@]},$newconts,$recycont,${#hosts[@]},$recyvms,$avgtime,$runs
 # if recycont==0 && recyvm==0 then promote and delete:
 # .newcont --> .origcont
 # .newvm --> .origvm
+if [[ $recycont == 0 && $recyvm == 0 ]]
+then
+    rm -f .origcont .origvm
+    mv .newcont .origcont
+    mv .newvm .origvm
+fi
 
 
 
