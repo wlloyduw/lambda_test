@@ -1,0 +1,13 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Simple Lambda@Edge Static Content Response</title>
+      </head>
+      <body>
+        Here's a page of content.</p>
+        </p>Stress level 5 performed.  -  Execution Time: 916</p>
+      </body>
+    </html>
+    

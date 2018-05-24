@@ -1,10 +1,13 @@
 #!/bin/bash
 
-#json={"\"name\"":"\"whoami\",\"calcs\"":20000,\"sleep\"":0,\"loops\"":20}
+json={"\"name\"":"\"whoami\",\"calcs\"":20000,\"sleep\"":0,\"loops\"":20}
 #echo $json
 
 #call using curl 
-#curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 
+curl -H "Content-Type: application/json" -X POST -d  $json https://ue5e0irnce.execute-api.us-east-1.amazonaws.com/test/test 
+
+exit
+
 #curl -H "Content-Type: application/json" -X POST -d  $json https://gc1jf6rl87.execute-api.us-east-1.amazonaws.com/dev1
 
 # Harrison Lambda@Edge
