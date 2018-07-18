@@ -69,18 +69,32 @@ public class lambda_test implements RequestHandler<Request, Response>
             }
             
         }
-            
-        for (int i=0;i<request.getLoops();i++)
+        
+        if (request.getLoops()>0)
         {
-            randomMath(request.getCalcs());
+            for (int i=0;i<request.getLoops();i++)
+            {
+                randomMath(request.getCalcs());
+                try
+                {
+                    Thread.sleep(request.getSleep());
+                }
+                catch (InterruptedException ie)
+                {
+                    System.out.println("Sleep was interrupted - calc mode...");
+                }  
+            }
+        }
+        else  // sleep only - no calcs
+        {
             try
             {
                 Thread.sleep(request.getSleep());
             }
             catch (InterruptedException ie)
             {
-                System.out.println("Sleep was interrupted...");
-            }  
+                System.out.println("Sleep was interrupted - no calc mode...");
+            }
         }
         CpuTime c2 = getCpuUtilization();
         VmCpuStat v2 = getVmCpuStat();

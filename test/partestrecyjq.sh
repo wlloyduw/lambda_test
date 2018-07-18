@@ -51,7 +51,11 @@ callservice() {
     #json={"\"name\"":"\"\",\"calcs\"":25000,\"sleep\"":0,\"loops\"":20}
 
     #(5) - heavy calcs - 2,000,000
-    json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+    ######json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
+    #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":25}
+
+    # NO CALCS - sleep only
+    json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":3500,\"loops\"":0}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
     #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
