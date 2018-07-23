@@ -1,0 +1,5 @@
+# /var/task directory contents on AWS Lambda
+total 0
+drwxrwxr-x 3 root root  32 Jul 17 18:32 com
+drwxrwxr-x 3 root root  47 Jul 17 18:32 META-INF
+drwxrwxr-x 2 root root 299 Jul 17 18:32 uwt  

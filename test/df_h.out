@@ -1,0 +1,4 @@
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/xvda1       30G  3.6G   26G  13% /
+/dev/loop4      526M  480K  514M   1% /tmp
+/dev/loop5      128K  128K     0 100% /var/task  

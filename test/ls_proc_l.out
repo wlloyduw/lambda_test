@@ -1,0 +1,62 @@
+total 0
+dr-xr-xr-x  9 sbx_user1065  481               0 Jul 23 00:04 1
+dr-xr-xr-x  9 sbx_user1065  481               0 Jul 23 00:04 11
+dr-xr-xr-x  2 root         root               0 Jul 23 00:04 acpi
+-r--r--r--  1 root         root               0 Jul 23 00:04 buddyinfo
+dr-xr-xr-x  4 root         root               0 Jul 23 00:04 bus
+-r--r--r--  1 root         root               0 Jul 23 00:04 cgroups
+-r--r--r--  1 root         root               0 Jul 23 00:04 cmdline
+-r--r--r--  1 root         root               0 Jul 23 00:04 consoles
+-r--r--r--  1 root         root               0 Jul 23 00:04 cpuinfo
+-r--r--r--  1 root         root               0 Jul 23 00:04 crypto
+-r--r--r--  1 root         root               0 Jul 23 00:04 devices
+-r--r--r--  1 root         root               0 Jul 23 00:04 diskstats
+-r--r--r--  1 root         root               0 Jul 23 00:04 dma
+dr-xr-xr-x  2 root         root               0 Jul 23 00:04 driver
+-r--r--r--  1 root         root               0 Jul 23 00:04 execdomains
+-r--r--r--  1 root         root               0 Jul 23 00:04 filesystems
+dr-xr-xr-x  5 root         root               0 Jul 23 00:04 fs
+-r--r--r--  1 root         root               0 Jul 23 00:04 interrupts
+-r--r--r--  1 root         root               0 Jul 23 00:04 iomem
+-r--r--r--  1 root         root               0 Jul 23 00:04 ioports
+dr-xr-xr-x 38 root         root               0 Jul 23 00:04 irq
+-r--r--r--  1 root         root               0 Jul 23 00:04 kallsyms
+-r--------  1 root         root 140737477885952 Jul 23 00:04 kcore
+-r--r--r--  1 root         root               0 Jul 23 00:04 keys
+-r--r--r--  1 root         root               0 Jul 23 00:04 key-users
+-r--------  1 root         root               0 Jul 23 00:04 kmsg
+-r--------  1 root         root               0 Jul 23 00:04 kpagecgroup
+-r--------  1 root         root               0 Jul 23 00:04 kpagecount
+-r--------  1 root         root               0 Jul 23 00:04 kpageflags
+-rw-r--r--  1 root         root               0 Jul 23 00:04 latency_stats
+-r--r--r--  1 root         root               0 Jul 23 00:04 loadavg
+-r--r--r--  1 root         root               0 Jul 23 00:04 locks
+-r--r--r--  1 root         root               0 Jul 23 00:04 mdstat
+-r--r--r--  1 root         root               0 Jul 23 00:04 meminfo
+-r--r--r--  1 root         root               0 Jul 23 00:04 misc
+-r--r--r--  1 root         root               0 Jul 23 00:04 modules
+lrwxrwxrwx  1 root         root              11 Jul 23 00:04 mounts -> self/mounts
+-rw-r--r--  1 root         root               0 Jul 23 00:04 mtrr
+lrwxrwxrwx  1 root         root               8 Jul 23 00:04 net -> self/net
+-r--r--r--  1 root         root               0 Jul 23 00:04 pagetypeinfo
+-r--r--r--  1 root         root               0 Jul 23 00:04 partitions
+----------  1 root         root               0 Jul 23 00:04 sched_debug
+-r--r--r--  1 root         root               0 Jul 23 00:04 schedstat
+dr-xr-xr-x  2 root         root               0 Jul 23 00:04 scsi
+lrwxrwxrwx  1 root         root               0 Jul 23 00:04 self -> 11
+-r--------  1 root         root               0 Jul 23 00:04 slabinfo
+-r--r--r--  1 root         root               0 Jul 23 00:04 softirqs
+-r--r--r--  1 root         root               0 Jul 23 00:04 stat
+-r--r--r--  1 root         root               0 Jul 23 00:04 swaps
+dr-xr-xr-x  1 root         root               0 Jul 23 00:04 sys
+--w-------  1 root         root               0 Jul 23 00:04 sysrq-trigger
+dr-xr-xr-x  2 root         root               0 Jul 23 00:04 sysvipc
+lrwxrwxrwx  1 root         root               0 Jul 23 00:04 thread-self -> 11/task/11
+----------  1 root         root               0 Jul 23 00:04 timer_list
+dr-xr-xr-x  4 root         root               0 Jul 23 00:04 tty
+-r--r--r--  1 root         root               0 Jul 23 00:04 uptime
+-r--r--r--  1 root         root               0 Jul 23 00:04 version
+-r--------  1 root         root               0 Jul 23 00:04 vmallocinfo
+-r--r--r--  1 root         root               0 Jul 23 00:04 vmstat
+dr-xr-xr-x  2 root         root               0 Jul 23 00:04 xen
+-r--r--r--  1 root         root               0 Jul 23 00:04 zoneinfo  
