@@ -23,7 +23,7 @@ do
     aws events remove-targets --rule rule$i --ids target_rule$i$j
     echo -n ""
   done
-  aws events delete-rule --name rule$i
+  aws events delete-rule --name $i
   echo -n "$i "
 done
 echo ""

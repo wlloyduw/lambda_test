@@ -29,10 +29,11 @@ do
   #aws events put-targets --rule $rule --targets "Id"="Target$i","Arn"="$ARN","Input"="$json"
   #aws events put-targets --rule $rule --targets "Id"="Target$i","Arn"="$ARN","Input"="$json"
   #aws events put-targets --rule $rule --targets "{\"Id\":\"Target$i\",\"Arn\":\"$ARN\",\"Input\":\"{\\\"name\\\":\\\"\\\",\\\"calcs\\\":0,\\\"sleep\\\":500,\\\"loops\\\":0}\"}"
-  rulearnraw=($(aws events put-rule --name "rule$i" --schedule-expression "cron(0/5 * * * ? *)" --state "ENABLED" --description "rule$i description."))
+  rulearnraw=($(aws events put-rule --name "rule$i" --schedule-expression "cron(0/5 * * * ? *)" --state "ENABLED" --description "r$i"))
   rulearn=($(echo ${rulearnraw[2]} | cut -d "\"" -f 2))
   echo "New rule=$rulearn" 
-  aws lambda add-permission --function-name $lambdaname --statement-id rulepermission$i --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn $rulearn
+  #aws lambda add-permission --function-name $lambdaname --statement-id rp$i --action 'lambda:*' --principal events.amazonaws.com --source-arn $rulearn
+  #aws lambda add-permission --function-name $lambdaname --statement-id rp$i --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn $rulearn
   ./put_triggers.sh $lambdaname $targets rule$i
 done
 echo ""

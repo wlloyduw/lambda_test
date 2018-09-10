@@ -18,7 +18,7 @@ fi
 echo -n "Deleting permission #"
 for (( i=1 ; i <= $events; i++ ))
 do
-  aws lambda remove-permission --function-name $lambdaname --statement-id rulepermission$i
+  aws lambda remove-permission --function-name $lambdaname --statement-id rp$i
   echo -n "$i "
 done
 echo ""
