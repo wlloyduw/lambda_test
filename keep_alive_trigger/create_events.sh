@@ -1,7 +1,7 @@
-# Can have up to 5 triggers for each event
-lambdaname=$1
-events=$2
-targets=$3
+# Can have up to 5 targets for each CloudWatch event rule.
+lambdaname=$1  # the AWS Lambda function to keep alive
+events=$2      # the number of CloudWatch Event rules to create
+targets=$3     # the number of targets for each rule
 #json="{'name':'','calcs':0,'sleep':7000,'loops':0}"
 json="{"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":7000,\"loops\"":0}"
 #json='{"name":"","calcs":0,"sleep":7000,"loops":0}'
@@ -9,9 +9,9 @@ if [ -z ${lambdaname} ]  ||  [ -z ${events} ] || [ -z ${targets} ]
 then
   echo ""
   echo "USAGE:"
-  echo "./create_events.sh (lambda_function_name) (number_of_events) (number_of_targets_per_event)"
+  echo "./create_events.sh (lambda_function_name) (number_of_rules) (number_of_targets_per_rule)"
   echo ""
-  echo "Creates multiple cloud watch events and associated targets to keep alive an AWS Lambda function."
+  echo "Creates multiple CloudWatch event rules and associated targets to keep alive an AWS Lambda function."
   echo ""
   echo "Provide parameters without quotation marks."
   echo ""
@@ -20,7 +20,7 @@ fi
 # get ARN of lambda function
 ARN=($(aws lambda get-function --function-name $lambdaname | grep Arn | cut -d"\"" -f 4))
 
-echo -n "Creating $events events for $ARN." 
+echo -n "Creating $events rules for $ARN." 
 echo ""
 for (( i=1 ; i <= $events; i++ ))
 do
@@ -34,7 +34,7 @@ do
   echo "New rule=$rulearn" 
   #aws lambda add-permission --function-name $lambdaname --statement-id rp$i --action 'lambda:*' --principal events.amazonaws.com --source-arn $rulearn
   #aws lambda add-permission --function-name $lambdaname --statement-id rp$i --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn $rulearn
-  ./put_triggers.sh $lambdaname $targets rule$i
+  ./put_targets.sh $lambdaname $targets rule$i
 done
 echo ""
 echo "Completed."

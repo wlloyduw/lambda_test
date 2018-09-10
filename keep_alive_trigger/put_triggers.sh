@@ -1,14 +1,18 @@
-# Can have up to 5 triggers for each event
+# Create targets for CloudWatch event rules
+# This script is called by create_events.sh and is not typically invoked directly...
+# Can have up to 5 targets for each event
 lambdaname=$1
-triggers=$2
+targets=$2
 rule=$3
 #json param not presently used...
 json="{"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":7000,\"loops\"":0}"
-if [ -z ${lambdaname} ]  ||  [ -z ${triggers} ]  || [ -z ${rule} ]
+if [ -z ${lambdaname} ]  ||  [ -z ${targets} ]  || [ -z ${rule} ]
 then
   echo ""
   echo "USAGE:"
-  echo "./keep_alive_trigger.sh (lambda_function_name) (trigger_count) (rule_name)"
+  echo "./put_triggers.sh (lambda_function_name) (target_count) (rule_count)"
+  echo ""
+  echo "Create targets for an AWS CloudWatch event rule.  A maximum of 5 targets can be created for each rule."
   echo ""
   echo "Provide parameters without quotation marks."
   echo ""
@@ -17,9 +21,9 @@ fi
 # get ARN of lambda function
 ARN=($(aws lambda get-function --function-name $lambdaname | grep Arn | cut -d"\"" -f 4))
 
-echo -n "Putting $triggers targets for $ARN using rule \"$rule\"."
+echo -n "Putting $targets targets for $ARN using rule \"$rule\"."
 echo ""
-for (( i=1 ; i <= $triggers; i++ ))
+for (( i=1 ; i <= $targets; i++ ))
 do
   echo -n "$i "
   #aws events put-targets --rule $rule --targets "Id"="Target$rule$i","Arn"="$ARN"
