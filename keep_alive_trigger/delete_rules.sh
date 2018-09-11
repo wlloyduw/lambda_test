@@ -20,7 +20,7 @@ for (( i=1 ; i <= $events; i++ ))
 do
   for (( j=1 ; j <= $targets; j++ ))
   do
-    aws events remove-targets --rule rule$i --ids target_rule$j
+    aws events remove-targets --rule rule$i --ids target_rule$i$j
     echo -n ""
   done
   aws events delete-rule --name rule$i
