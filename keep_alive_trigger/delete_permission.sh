@@ -7,7 +7,7 @@ then
   echo "USAGE: "
   echo "./delete_permission.sh (lambda_function_name) "
   echo ""
-  echo "Deletes cloudwatch event execute permissions for specified AWS Lambda functions"
+  echo "Deletes cloudwatch event execute permissions for specified AWS Lambda function"
   echo ""
   echo "Provide parameters without quotation marks."
   echo ""

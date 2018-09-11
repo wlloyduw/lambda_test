@@ -8,7 +8,7 @@ if [ -z ${lambdaname} ]  ||  [ -z ${account_id} ]
 then
   echo ""
   echo "USAGE:"
-  echo "./create_events.sh (lambda_function_name) (account_id)"
+  echo "./create_permission.sh (lambda_function_name) (account_id)"
   echo ""
   echo "Assigns InvokeFunction permission for all cloudwatch events from the specified account to the specified AWS Lambda function."
   echo ""
