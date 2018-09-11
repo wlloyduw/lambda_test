@@ -27,7 +27,7 @@ for (( i=1 ; i <= $targets; i++ ))
 do
   echo -n "$i "
   #aws events put-targets --rule $rule --targets "Id"="Target$rule$i","Arn"="$ARN"
-  aws events put-targets --rule $rule --targets "{\"Id\":\"target_$rule$i\",\"Arn\":\"$ARN\",\"Input\":\"{\\\"name\\\":\\\"\\\",\\\"calcs\\\":0,\\\"sleep\\\":6125,\\\"loops\\\":0}\"}"
+  aws events put-targets --rule $rule --targets "{\"Id\":\"target_$rule$i\",\"Arn\":\"$ARN\",\"Input\":\"{\\\"name\\\":\\\"\\\",\\\"calcs\\\":0,\\\"sleep\\\":4000,\\\"loops\\\":0}\"}"
   #aws events put-targets --rule $rule --targets "{\"Id\":\"target_$rule$i\",\"Arn\":\"$ARN\",\"Input\":\"{\\\"sleep\\\":10000}\"}"
 done
 echo ""
