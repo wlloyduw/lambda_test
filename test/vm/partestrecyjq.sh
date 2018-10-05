@@ -52,10 +52,10 @@ callservice() {
 
     #(5) - heavy calcs - 2,000,000
     ######json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
-    json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":25}
+    #json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":25}
 
     # NO CALCS - sleep only
-    #json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":1000,\"loops\"":0}
+    json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":7000,\"loops\"":0}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
     #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
@@ -88,8 +88,6 @@ callservice() {
 
     # grab end time
     time2=( $(($(date +%s%N)/1000000)) )
-
-    #echo $output
 
     # parsing when /proc/cpuinfo is requested
     uuid=`echo $output | jq '.uuid'`
