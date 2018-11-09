@@ -52,10 +52,10 @@ callservice() {
 
     #(5) - heavy calcs - 2,000,000
     ######json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":20}
-    json={"\"name\"":"\"\",\"calcs\"":100000,\"sleep\"":0,\"loops\"":25}
+    json={"\"name\"":"\"\",\"calcs\"":1000000,\"sleep\"":0,\"loops\"":25}
 
     # NO CALCS - sleep only
-    #json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":1000,\"loops\"":0}
+    #json={"\"name\"":"\"\",\"calcs\"":0,\"sleep\"":50,\"loops\"":0}
 
     #(6) - many calcs no memory stress - results in more kernel time - 6,000,000
     #json={"\"name\"":"\"\",\"calcs\"":20,\"sleep\"":0,\"loops\"":300000}
@@ -96,7 +96,7 @@ callservice() {
     cpuusr=`echo $output | jq '.cpuUsr'`  
     cpukrn=`echo $output | jq '.cpuKrn'`
     pid=`echo $output | jq '.pid'`
-    cputype="unknown"
+    cputype=`echo $output | jq '.cpuType'`
     cpusteal=`echo $output | jq '.vmcpusteal'`
     vuptime=`echo $output | jq '.vmuptime'`
     newcont=`echo $output | jq '.newcontainer'`

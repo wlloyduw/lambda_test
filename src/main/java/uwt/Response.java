@@ -19,6 +19,7 @@ public class Response {
     long cpuKrn;
     long cutime;
     long cstime;
+    String cpuType;
     int pid;
     long vmcpuusr;
     long vmcpunice;
@@ -96,6 +97,14 @@ public class Response {
         this.pid = pid;
     }
     
+    public String getCpuType()
+    {
+        return this.cpuType;
+    }
+    public void setCpuType(String cputype)
+    {
+        this.cpuType = cputype;
+    }
     
     public long getVmcpuusr()
     {

@@ -20,7 +20,8 @@
 #json={"\"name\"":"\"ls\u0020-l\u0020\/proc\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
 # identify the Lambda CPU
-json={"\"name\"":"\"cat\u0020\/proc\/cpuinfo\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+json={"\"name\"":"\"\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
+#json={"\"name\"":"\"cat\u0020\/proc\/cpuinfo\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 
 #json={"\"name\"":"\"ls\u0020-l\u0020\/\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}
 #json={"\"name\"":"\"ls\u0020-l\u0020\/sys\",\"calcs\"":1000,\"sleep\"":0,\"loops\"":20}

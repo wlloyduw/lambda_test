@@ -107,6 +107,7 @@ public class lambda_test implements RequestHandler<Request, Response>
         Response r = new Response(fileout, uuid, cused.utime, cused.stime, cused.cutime, cused.cstime, vused.cpuusr,
                                   vused.cpunice, vused.cpukrn, vused.cpuidle, vused.cpuiowait, vused.cpuirq, 
                                   vused.cpusirq, vused.cpusteal, vuptime, newcontainer);
+        r.setCpuType(getCpuType());
         r.setPid(getPID());
         
         
@@ -137,6 +138,15 @@ public class lambda_test implements RequestHandler<Request, Response>
             mult = operand_a[j] * operand_b[j];
             div1 = (double) mult / (double) operand_c[j];
         }
+    }
+    
+    public String getCpuType()
+    {
+        String text = getFileAsString("/proc/cpuinfo");
+        int start = text.indexOf("name") + 7;
+        int end = start + text.substring(start).indexOf(":");
+        String cpuType = text.substring(start,end).trim();
+        return cpuType;
     }
     
     public String getFileAsString(String filename)
